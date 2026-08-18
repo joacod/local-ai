@@ -1,63 +1,49 @@
-# Local AI Inference
+# Local AI
 
-Run and compare local language-model servers on Apple Silicon. These guides are copyable setup notes; they do not install packages, download models, or start servers automatically.
+Practical notes for running local language-model servers and inference tools on Apple Silicon. The current primary reference machine is a **MacBook Pro — Apple M4 — 48 GB unified memory**; machine-specific settings are always labeled as starting points or measured results.
+
+This repository is not a model-quality benchmark, model leaderboard, research notebook, or cross-runtime comparison project. It focuses on getting a useful local server running and tuning that server for a specific model, workload, and Mac.
 
 ## Runtime guides
 
-| Runtime | Best first question | Guide |
+| Runtime | Use it to explore | Guide |
 | --- | --- | --- |
-| MLX / `mlx-lm` | What is the current single-agent baseline? | [`./mlx`](./mlx) |
-| `llama.cpp` | How does the same family behave with GGUF and Metal? | [`./llama-cpp`](./llama-cpp) |
-| oMLX | Does batching and tiered KV caching improve daily-agent use? | [`./omlx`](./omlx) |
-| MTPLX | How much does native MTP speculative decoding improve Qwen 3.8 decode? | [`./mtplx`](./mtplx) |
+| MLX / `mlx-lm` | MLX model workflows and local serving | [`./mlx`](./mlx) |
+| `llama.cpp` | GGUF models and Metal inference | [`./llama-cpp`](./llama-cpp) |
+| `oMLX` | Continuous batching and tiered KV caching | [`./omlx`](./omlx) |
+| `MTPLX` | Native MTP speculative decoding | [`./mtplx`](./mtplx) |
 
-Use the [fair comparison plan](./benchmarking.md) after each runtime can serve a smoke-test request.
+## Local model notes
 
-## Starting point for an M4 Mac with 48 GB
+The [`local-models/`](./local-models) directory holds operational notes for specific model artifacts: compatibility requirements, chat templates, quantization details, context behavior, and runtime-specific loading instructions. These notes are not model reviews or quality rankings.
 
-The target in this experiment is a **dense Qwen3.8 27B** model, not the existing Qwen3.6 MoE profile. Keep those results as separate baselines: dense and MoE models have different weight footprints, active compute, cache behavior, and quality trade-offs.
+## Typical workflow
 
-| Candidate | First use | Why it belongs in the first pass | Important caveat |
-| --- | --- | --- | --- |
-| [`Youssofal/Qwen3.8-27B-MTPLX-Optimized-Speed`](https://huggingface.co/Youssofal/Qwen3.8-27B-MTPLX-Optimized-Speed) | MTPLX | 4-bit dynamic quantization with the native MTP head retained; the model card recommends it for coding on Macs with 32 GB or more. | The model is about 21.3 GB on disk; disk size is not the same as runtime memory. Start with a conservative context and measure headroom. |
-| `Qwen3.8-27B-MLX-oQ4e-mtp` | oMLX | The current oMLX benchmark catalog uses this 4-bit oQ/MTP model label on 48 GB M4 hardware. | Select it from oMLX's model downloader and record the actual Hugging Face repository and revision. Do not assume the catalog label is a repository ID or that an MTPLX checkpoint is interchangeable. |
-| Existing `mlx-lm` profile | MLX | Provides the repository's measured Apple Silicon workflow and a known OpenAI-compatible API. | The tracked M4 profile uses `Qwen3.6-35B-A3B-4bit-DWQ`, a MoE model; it is an operational baseline, not a controlled dense-model comparison. |
-| Existing GGUF profile | `llama.cpp` | Shows how a GGUF runtime behaves on the same machine and API shape. | Use a Qwen3.8 GGUF only after verifying that the exact model and quant exist. Otherwise label the existing Qwen3.6 GGUF run as a separate family baseline. |
+1. Choose the runtime that supports the model format or serving feature you need.
+2. Follow its installation, model-selection, server, and API smoke-test instructions.
+3. Stop and resolve model-load, health, or memory errors before tuning parameters.
+4. Once one server and one model work, use the [runtime configuration tuning guide](./runtime-tuning.md) to test one parameter at a time for your workload.
+5. Record the resulting recommendation in the relevant hardware profile or model note, including the exact runtime, model revision, and flags.
 
-The MTPLX model has a native MTP contract. A server that can load ordinary MLX safetensors is not automatically able to use that MTP path. Record the exact model repository, revision, quantization layout, and runtime mode for every result.
+## What belongs here
 
-## Shared local-server rules
+- Installation and dependency notes for local inference runtimes.
+- Server launch commands, API examples, aliases, helper scripts, and hardware-specific presets.
+- Memory, context, KV-cache, quantization, batching, concurrency, and runtime-mode guidance.
+- Small, focused measurements that choose better parameters for one server/model/machine combination.
 
-- Run only one large model server at a time. The existing MLX and `llama.cpp` launchers use port `8080`; oMLX and MTPLX use `8000` by default.
-- Keep the bind address on `127.0.0.1` unless remote access is intentional and authenticated.
-- Check `/health` and `/v1/models` before sending benchmark requests.
-- Use one model, one active request, and a fixed context/generation policy for the first comparison. Tune concurrency, SSD caching, KV-cache precision, MTP depth, and thermal settings in a later pass.
-- Treat a model download as a separate decision from a server install. Confirm free disk and memory headroom first.
+## What does not belong here
 
-## API shape
+- Best-model lists, intelligence or quality rankings, model-vs-model reviews, prompt or reasoning benchmarks, or cross-runtime leaderboards.
+- Large benchmark matrices whose purpose is to compare engines or model quality.
+- Historical experiment archives. Keep only current recommendations and clearly labeled operational notes.
 
-All four runtimes can expose an OpenAI-compatible chat endpoint, but their model IDs and metrics differ. Use the ID returned by the running server rather than guessing it:
+## Shared rules
 
-```sh
-curl http://127.0.0.1:<port>/health
-curl http://127.0.0.1:<port>/v1/models
-```
-
-Then send a small smoke-test request:
-
-```sh
-curl http://127.0.0.1:<port>/v1/chat/completions \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "model": "<id-from-v1-models>",
-    "messages": [{"role": "user", "content": "Reply with: local server is ready."}],
-    "temperature": 0,
-    "max_tokens": 32,
-    "stream": false
-  }'
-```
-
-For coding tools, the usual OpenAI-compatible base URL is `http://127.0.0.1:<port>/v1`. Keep runtime-specific configuration in the tool's own guide.
+- Run only one large model server at a time. MLX and `llama.cpp` use port `8080`; `oMLX` and `MTPLX` use `8000` by default.
+- Keep servers on `127.0.0.1` unless remote access is intentional and authenticated.
+- Confirm free disk and memory headroom before downloading a large model.
+- Record the exact model repository, revision, quantization, runtime version, serving mode, and tuning objective for every documented result.
 
 ## Official references
 

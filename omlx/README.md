@@ -4,7 +4,7 @@ Run MLX-compatible language models on Apple Silicon with [oMLX](https://github.c
 
 This is the operational guide for installing oMLX, loading a model, starting a local server, and choosing memory, context, cache, and concurrency settings. The current reference machine is a **MacBook Pro — Apple M4 — 48 GB unified memory**. Values described as recommendations are starting points, not universal optima; measured values must include the machine, runtime, model, quantization, and cache state.
 
-This repository is not a model-quality or model-ranking benchmark. Use the [shared comparison plan](../benchmarking.md) only for small, reproducible runtime and configuration measurements.
+This repository is not a model-quality, model-ranking, or cross-runtime comparison project. After a server and model work, use the [runtime configuration tuning guide](../runtime-tuning.md) to choose settings for a stated workload.
 
 ## Requirements
 
@@ -43,7 +43,7 @@ omlx stop
 omlx restart
 ```
 
-Use the foreground command below when you want the exact server flags visible in a terminal or when collecting benchmark evidence.
+Use the foreground command below when you want the exact server flags visible in a terminal or when collecting tuning evidence.
 
 ### From source
 
@@ -75,7 +75,7 @@ omlx serve \
   --port 8000
 ```
 
-The server discovers model subdirectories under `~/.omlx/models`. Open the admin dashboard at <http://127.0.0.1:8000/admin> and use its Hugging Face model downloader to select a model, inspect its files, and download it. The dashboard also exposes built-in chat, model status, settings, and benchmarking.
+The server discovers model subdirectories under `~/.omlx/models`. Open the admin dashboard at <http://127.0.0.1:8000/admin> and use its Hugging Face model downloader to select a model, inspect its files, and download it. The dashboard also exposes built-in chat, model status, settings, and performance measurements.
 
 ## Select a model
 
@@ -172,4 +172,4 @@ The SSD cache normally uses `~/.omlx/cache` and its automatic size is based on 1
 - [oMLX releases](https://github.com/jundot/omlx/releases)
 - [oMLX performance explorer](https://omlx.ai/benchmarks/performance)
 - [oMLX quantization notes](https://github.com/jundot/omlx/blob/main/docs/oQ_Quantization.md)
-- [Local AI comparison plan](../benchmarking.md)
+- [Runtime configuration tuning guide](../runtime-tuning.md)

@@ -4,7 +4,7 @@ Run Apple Silicon language models with [MTPLX](https://github.com/youssofal/MTPL
 
 This is the operational guide for installing MTPLX, selecting a compatible model, starting a local server, and tuning MTP, context, cache, and concurrency settings. The current reference machine is a **MacBook Pro — Apple M4 — 48 GB unified memory**. Values described as recommendations are starting points, not universal optima; measured values must include the machine, runtime, model, quantization, and serving mode.
 
-This repository is not a model-quality or model-ranking benchmark. Use the [shared comparison plan](../benchmarking.md) only for small, reproducible runtime and configuration measurements.
+This repository is not a model-quality, model-ranking, or cross-runtime comparison project. After a server and model work, use the [runtime configuration tuning guide](../runtime-tuning.md) to choose settings for a stated workload.
 
 ## Requirements
 
@@ -130,7 +130,7 @@ The current primary machine is documented in the [MacBook Pro M4 48 GB starting 
 - `generation_mode: "ar"` uses target-only autoregressive generation while keeping the MTP runtime available for a later request.
 - `--no-mtp` selects target-only AR at server startup.
 
-For the first speed comparison, keep MTP enabled and record its acceptance/depth statistics. Run an AR comparison only as a separate, explicitly labeled lane; MTP and AR numbers answer different questions.
+For the first tuning run, keep MTP enabled and record its acceptance/depth statistics. Run AR as a separate, explicitly labeled serving mode; MTP and AR numbers answer different runtime-configuration questions.
 
 ## Reset the runtime cache
 
@@ -142,7 +142,7 @@ curl -X POST http://127.0.0.1:8000/admin/cache/clear
 
 Add `-H 'Authorization: Bearer <api-key>'` when the server is configured with an API key. Use the model-management command or app controls separately when downloaded model files must be removed.
 
-## First benchmark baseline
+## First tuning baseline
 
 This is an operational configuration lane for choosing MTP/AR mode, context, cache, and concurrency settings. It is not a model-quality or model-ranking exercise.
 
@@ -154,7 +154,7 @@ Before tuning fan control, scheduler modes, context, or draft depth:
 - read the authoritative `mtplx_stats` block from the final response chunk
 - record `prefill_tok_s`, `decode_tok_s`, `ttft_s`, cached tokens, peak memory, and `accepted_by_depth` / `drafted_by_depth`
 
-`MTPLX`'s [benchmarking guide](https://github.com/youssofal/MTPLX/blob/main/docs/benchmarking.md) documents cache clearing, capped reasoning requests, server-side timing, and thermal discipline. Use the [cross-runtime plan](../benchmarking.md) to compare those results with MLX, `llama.cpp`, and `oMLX` without mixing cold and cached measurements.
+`MTPLX`'s [benchmarking guide](https://github.com/youssofal/MTPLX/blob/main/docs/benchmarking.md) documents cache clearing, capped reasoning requests, server-side timing, and thermal discipline. Use the [runtime configuration tuning guide](../runtime-tuning.md) to choose settings for this server without mixing cold and cached measurements.
 
 ## Troubleshooting
 
@@ -171,4 +171,4 @@ Before tuning fan control, scheduler modes, context, or draft depth:
 - [MTPLX architectures](https://github.com/youssofal/MTPLX/blob/main/docs/architectures.md)
 - [MTPLX API](https://github.com/youssofal/MTPLX/blob/main/docs/api.md)
 - [MacBook Pro M4 48 GB starting profile](./hardware/m4-48gb.md)
-- [Local AI comparison plan](../benchmarking.md)
+- [Runtime configuration tuning guide](../runtime-tuning.md)
