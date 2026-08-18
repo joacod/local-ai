@@ -1,30 +1,30 @@
 # oMLX
 
-Run MLX-compatible language models on Apple Silicon with [oMLX](https://github.com/jundot/omlx), an OpenAI-compatible server with continuous batching, tiered KV caching, model management, and a macOS menu-bar app.
+Run MLX-compatible language models with [oMLX](https://github.com/jundot/omlx),
+an OpenAI-compatible server with model management, continuous batching, and
+tiered KV caching. The macOS app is convenient when you want a managed model
+directory and dashboard; the CLI is useful when you need the exact server flags
+visible in a terminal.
 
-This is the operational guide for installing oMLX, loading a model, starting a local server, and choosing memory, context, cache, and concurrency settings. The current reference machine is a **MacBook Pro — Apple M4 — 48 GB unified memory**. Values described as recommendations are starting points, not universal optima; measured values must include the machine, runtime, model, quantization, and cache state.
-
-After the server and model work, use the [runtime tuning and qualification guide](../docs/tuning.md) to choose settings for a stated workload.
+For shared model, artifact, and qualification concepts, see the repository's
+[getting-started](../docs/getting-started.md), [terminology](../docs/terminology.md),
+[Hugging Face](../docs/hugging-face.md), and [tuning](../docs/tuning.md) notes.
 
 ## Requirements
 
 - Apple Silicon Mac
-- macOS 15 or newer
-- Apple Silicon-compatible MLX model files
-- enough disk space and unified-memory headroom for the selected model
+- the macOS and Python versions supported by the installed oMLX release;
+  the source path below currently documents Python 3.11–3.13
+- an MLX-format model supported by that release
+- enough disk and unified-memory headroom for the selected model and cache
 
-## Guide boundaries
-
-- **In scope:** installation, model loading, server startup, memory and context settings, cache behavior, concurrency, API checks, and troubleshooting.
-- **Out of scope:** model intelligence rankings, prompt-quality comparisons, and cross-model leaderboards.
-
-The macOS app is the simplest path. The Homebrew and source paths are useful when the server should be managed from a terminal.
-
-## Install
+## Install or update
 
 ### macOS app
 
-Download the [latest oMLX release](https://github.com/jundot/omlx/releases), open the `.dmg`, and drag oMLX to Applications. The app includes a CLI shim at `~/.omlx/bin/omlx` and walks through the model directory and first download.
+Download the [latest oMLX release](https://github.com/jundot/omlx/releases), open
+the `.dmg`, and drag oMLX to Applications. The app provides a CLI shim at
+`~/.omlx/bin/omlx` and guides the model-directory setup.
 
 ### Homebrew
 
@@ -35,7 +35,7 @@ omlx --help
 omlx serve --help
 ```
 
-Start and manage the Homebrew service with:
+For a managed service:
 
 ```sh
 omlx start
@@ -43,11 +43,12 @@ omlx stop
 omlx restart
 ```
 
-Use the foreground command below when you want the exact server flags visible in a terminal or when collecting tuning evidence.
+Use the foreground command in the next section when you need server flags
+visible in a terminal or when collecting qualification evidence.
 
 ### From source
 
-The upstream source install requires Python 3.11–3.13 and Apple Silicon:
+The upstream source path requires Apple Silicon and Python 3.11–3.13:
 
 ```sh
 git clone https://github.com/jundot/omlx.git
@@ -57,15 +58,19 @@ python3 -m venv .venv
 python -m pip install -e .
 ```
 
-A plain source install is enough for the baseline. Native custom kernels are an optional path for affected model families; they require full Xcode and are not required for every `oMLX` model:
+Native custom kernels are optional for affected model families and require full
+Xcode:
 
 ```sh
 OMLX_WITH_CUSTOM_KERNEL=1 python -m pip install -e .
 ```
 
+Use one installation path for the first experiment so the executable and
+version are unambiguous.
+
 ## First server
 
-Use the default model directory and keep the server local:
+Create the default model directory and keep the server local:
 
 ```sh
 mkdir -p "$HOME/.omlx/models"
@@ -75,13 +80,16 @@ omlx serve \
   --port 8000
 ```
 
-The server discovers model subdirectories under `~/.omlx/models`. Open the admin dashboard at <http://127.0.0.1:8000/admin> and use its Hugging Face model downloader to select a model, inspect its files, and download it. The dashboard also exposes built-in chat, model status, settings, and performance measurements.
+Open `http://127.0.0.1:8000/admin` and use the dashboard's model downloader to
+inspect and download a compatible MLX artifact. The dashboard also provides
+model status, settings, chat, and performance observations.
 
-## Select a model
+The model directory contains subdirectories managed by oMLX. Record the exact
+repository, revision, quantization, and API model ID returned by `/v1/models`.
+A catalog label is not automatically a repository ID, and an MLX artifact made
+for another server is not automatically compatible.
 
-Use an MLX-format model that the installed oMLX release supports. A catalog label is not necessarily a Hugging Face repository ID, so record the repository, revision, quantization, and API model ID returned by `/v1/models`.
-
-For a Qwen3.8 runtime-configuration workload on the 48 GB reference machine, the current catalog may include `Qwen3.8-27B-MLX-oQ4e-mtp`. Treat that as an example workload for testing server settings, not as a model-quality recommendation or a measurement that applies to every 48 GB Mac. If the catalog does not contain a compatible conversion, use a model that the installed oMLX release currently supports rather than assuming that an `MTPLX` checkpoint can use oMLX's MTP path.
+For a concrete model-family note, see the [Qwen3.8 operational notes](../local-models/qwen38.md).
 
 ## Verify the API
 
@@ -90,7 +98,7 @@ curl http://127.0.0.1:8000/health
 curl http://127.0.0.1:8000/v1/models
 ```
 
-Use the model ID returned by `/v1/models` for a smoke test:
+Use the model ID returned by `/v1/models` for a small request:
 
 ```sh
 curl http://127.0.0.1:8000/v1/chat/completions \
@@ -110,61 +118,77 @@ The OpenAI-compatible base URL for coding tools is:
 http://127.0.0.1:8000/v1
 ```
 
-Do not expose the server beyond localhost without configuring an API key and an intentional network boundary.
+Do not expose the server beyond localhost without an API key and an intentional
+network boundary.
 
-## Reference hardware
+## Daily use and profiles
 
-The current primary machine is documented in the [MacBook Pro M4 48 GB starting profile](./hardware/m4-48gb.md). That profile separates upstream defaults, conservative recommendations, and values that still need to be measured locally.
+oMLX does not currently have a repository launcher or a checked-in reusable
+qualification command. Use `omlx serve`, the managed service, or the app for
+daily use. The [M4 48 GB starting profile](./hardware/m4-48gb.md) records a
+conservative baseline; its values are not a completed measurement report.
+
+When no profile matches the machine, model, and workload, use the shared
+[runtime tuning and qualification guide](../docs/tuning.md). Confirm the server
+and one chat request first, then change one setting at a time. Add a reusable
+profile only after the exact environment and workload have been measured.
 
 ## Conservative baseline
 
-Start with the smallest configuration that makes memory behavior observable:
-
-- **Defaults:** `127.0.0.1:8000`, the balanced memory guard, and one model.
-- **Recommendation for the reference machine:** one active request and a 32k context target until memory behavior is measured. This is a target, not a universal hard cap.
-- **Cold runtime lane:** add `--no-cache` to disable oMLX's paged SSD cache. `mlx-lm` still manages its internal KV state.
-- **Cache lane:** use `--paged-ssd-cache-dir` and label results as warm or SSD-restored.
-
-For a single-request cold baseline:
+Start with one model and one active request so memory behavior is observable:
 
 ```sh
 omlx serve \
   --model-dir "$HOME/.omlx/models" \
   --host 127.0.0.1 \
   --port 8000 \
-  --no-cache \
-  --max-concurrent-requests 1
+  --memory-guard balanced \
+  --max-concurrent-requests 1 \
+  --no-cache
 ```
 
-For a deliberately cached lane:
+For a deliberately cached lane, use a dedicated directory:
 
 ```sh
 omlx serve \
   --model-dir "$HOME/.omlx/models" \
+  --host 127.0.0.1 \
+  --port 8000 \
+  --memory-guard balanced \
+  --max-concurrent-requests 1 \
   --paged-ssd-cache-dir "$HOME/.omlx/cache"
 ```
 
-Record whether a result is cold, in-memory cached, or SSD-restored. Cache behavior is an operational variable, not a reason to mix warm and cold numbers.
+Keep cold, in-memory cached, and SSD-restored observations separate. A
+context target is not a promise that every model fits; weights, activations,
+KV state, cache state, macOS, and other applications share unified memory.
 
-## Reset the runtime cache
+## Runtime cache reset
 
-From the admin dashboard, open **Runtime Cache Observability** and clear the Memory or SSD tier. For scripted runs, the authenticated admin endpoints are:
+From the admin dashboard, open **Runtime Cache Observability** and clear the
+Memory or SSD tier. For scripted runs, the authenticated endpoints are:
 
 ```text
 POST http://127.0.0.1:8000/admin/api/hot-cache/clear
 POST http://127.0.0.1:8000/admin/api/ssd-cache/clear
 ```
 
-These endpoints require an admin session when authentication is enabled. They clear runtime cache state, not downloaded model files.
+These endpoints require an admin session when authentication is enabled. They
+clear runtime cache state, not downloaded model files. Stop a foreground server
+with `Control-C`; use `omlx stop` for a managed service.
 
-The SSD cache normally uses `~/.omlx/cache` and its automatic size is based on 10% of total disk capacity. Keep SSD caching as a separate warm-cache experiment.
+## Troubleshooting
 
-## Stop and troubleshoot
-
-- Stop a foreground server with `Control-C`; use `omlx stop` for a managed service.
-- If port `8000` is busy, inspect it before stopping anything: `lsof -nP -iTCP:8000 -sTCP:LISTEN`.
-- If memory pressure grows, stop the server, lower the context target, unload other models, or choose a smaller quant. Do not assume a model's weight size is its peak process size.
-- Run only one large model backend at a time. The existing MLX and `llama.cpp` launchers use port `8080`; `oMLX` and `MTPLX` use `8000` by default.
+- **Port 8000 is busy:** inspect it with
+  `lsof -nP -iTCP:8000 -sTCP:LISTEN` before stopping anything.
+- **The model is rejected:** use an MLX artifact supported by the installed
+  release and keep its repository/revision separate from other conversions.
+- **Memory pressure grows:** stop the server, lower the context target, unload
+  other models, reduce concurrency, or choose a smaller quantization.
+- **Cache results are confusing:** clear the relevant tier and label whether a
+  run is cold, in-memory cached, or SSD-restored.
+- **Network exposure is unexpected:** bind to `127.0.0.1` and inspect any
+  intentional API-key/network configuration.
 
 ## Official references
 
@@ -172,4 +196,4 @@ The SSD cache normally uses `~/.omlx/cache` and its automatic size is based on 1
 - [oMLX releases](https://github.com/jundot/omlx/releases)
 - [oMLX performance explorer](https://omlx.ai/benchmarks/performance)
 - [oMLX quantization notes](https://github.com/jundot/omlx/blob/main/docs/oQ_Quantization.md)
-- [Runtime tuning and qualification guide](../docs/tuning.md)
+- [Runtime tuning and qualification](../docs/tuning.md)
