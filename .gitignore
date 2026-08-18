@@ -1,0 +1,22 @@
+.DS_Store
+
+# Python environments and generated files
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local caches and logs
+.cache/
+*.log
+
+# Local secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
