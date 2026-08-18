@@ -4,9 +4,7 @@ Operational notes for running Qwen3.8 artifacts on Apple Silicon. This is a mode
 
 ## Scope
 
-The current reference context is a **MacBook Pro M4 with 48 GB unified memory**. Treat every setting as a workload-specific starting point until it has been measured on the exact machine, runtime version, model revision, and quantization.
-
-A shared Qwen name does not make artifacts interchangeable. Record the exact repository, revision, quantization layout, tokenizer, serving mode, and returned API model ID for every run.
+This file contains Qwen3.8-specific operational and compatibility notes that remain useful across machines and runtimes. Machine-specific settings and measured recommendations belong in runtime hardware profiles. Model artifacts are not automatically interchangeable across runtimes; record the exact repository, revision, quantization layout, tokenizer, serving mode, and returned API model ID for every run.
 
 ## Runtime-specific loading notes
 
@@ -44,18 +42,6 @@ For `MTPLX`, also inspect `/health` for `load_mtp`, `mtp_enabled`, `depth`, and 
 
 See the [oMLX guide](../omlx/README.md), [MTPLX guide](../mtplx/README.md), and [runtime tuning and qualification guide](../docs/tuning.md) for runtime-specific setup and parameter tuning.
 
-## Tune a working server
+## Hardware qualification
 
-Do not tune Qwen3.8 before the selected runtime can load the model and complete a smoke-test request. Then choose one objective—memory headroom, context size, cache reuse, interactive latency, or concurrency—and change one server parameter at a time.
-
-Keep the model artifact fixed while tuning the server. Record cold versus warm state, exact flags, context, concurrency, memory behavior, and runtime-specific metrics. Promote a successful setting to the relevant hardware profile; keep model compatibility and chat-template notes here.
-
-## Record with every note
-
-- hardware, macOS version, power, and thermal state;
-- runtime version and exact server flags;
-- model repository, resolved revision, file size, quantization, and tokenizer;
-- returned API model ID and serving mode;
-- context, response cap, sampling, and thinking policy;
-- cold or cached state, TTFT, prefill rate, decode rate, and peak memory;
-- runtime-specific metrics such as MTPLX `mtplx_stats` or oMLX dashboard values.
+First get Qwen3.8 working with the selected runtime and artifact. If a suitable hardware profile exists, use it as documented; otherwise qualify the exact runtime, model artifact, machine, and workload by following the [runtime tuning and qualification guide](../docs/tuning.md). Put measured machine-specific results in the relevant runtime hardware profile, and keep Qwen3.8 compatibility and other model-specific findings in this file.
