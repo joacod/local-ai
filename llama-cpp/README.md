@@ -1,139 +1,137 @@
 # llama.cpp
 
-Run local GGUF models from the terminal with [llama.cpp](https://github.com/ggml-org/llama.cpp)
+Run local GGUF artifacts from the terminal with
+[`llama.cpp`](https://github.com/ggml-org/llama.cpp).
 
-## What llama.cpp is
+`llama-cli` runs one-off prompts, while `llama-server` exposes a local
+OpenAI-compatible API. Choose this runtime when the model you want is
+available as GGUF or when you want llama.cpp's Metal and server controls.
 
-`llama.cpp` is a local LLM runtime.
-
-- `llama-cli` runs prompts directly in the terminal
-- `llama-server` exposes a local OpenAI-compatible API
-- `GGUF` is the model file format `llama.cpp` loads
-
-This makes `llama.cpp` a practical way to chat with models locally, test different model sizes, and connect local models to tools like OpenCode.
-
-For a controlled comparison with MLX, oMLX, and MTPLX, see the [Local AI overview](../README.md) and [fair comparison plan](../benchmarking.md).
+For shared model and memory concepts, see the repository's
+[getting-started](../docs/getting-started.md), [terminology](../docs/terminology.md),
+and [Hugging Face artifact](../docs/hugging-face.md) notes.
 
 ## Install
 
-Install `llama.cpp` with Homebrew.
+Install the Homebrew package:
 
 ```sh
 brew install llama.cpp
 ```
 
-## Verify The Binaries
-
-Check that the main binaries are available.
+Verify both entry points:
 
 ```sh
 llama-cli --help
 llama-server --help
 ```
 
-## Get A GGUF Model From Hugging Face
+## Select a GGUF artifact
 
-For most `llama.cpp` users, Hugging Face is the main place to find `GGUF` models, and it is where much of the community publishes them.
-
-The simplest way to get started is to let `llama.cpp` download a compatible model directly from a Hugging Face repo.
+`llama.cpp` loads [GGUF](https://github.com/ggml-org/llama.cpp) files. Hugging
+Face repositories often publish several GGUF quantizations, so select the
+exact repository and quant when necessary:
 
 ```sh
 llama-cli -hf ggml-org/gemma-3-1b-it-GGUF
+llama-cli -hf ggml-org/gemma-3-1b-it-GGUF:Q4_K_M
 ```
 
-Run a one-off prompt:
+The `-hf <organization>/<repository>[:quant]` form downloads a compatible file
+through llama.cpp. Read [GGUF, Hugging Face, and tuning](./gguf-and-tuning.md)
+and the shared [Hugging Face notes](../docs/hugging-face.md) before downloading
+a larger artifact.
+
+The first `-hf` use downloads to the local llama.cpp/Hugging Face cache. The
+launcher below only starts models already present in the llama.cpp cache.
+
+## First smoke test
+
+Run a small one-off prompt before starting a long-lived server:
 
 ```sh
-llama-cli -hf ggml-org/gemma-3-1b-it-GGUF -p "Explain recursion in simple terms."
+llama-cli -hf ggml-org/gemma-3-1b-it-GGUF -p "Reply with: llama.cpp is ready."
 ```
 
-`llama.cpp` expects models in `GGUF` format. The `-hf <user>/<model>[:quant]` flag downloads a compatible model directly.
+Then confirm the selected artifact works with the server path in the next
+section.
 
-### Remove A Downloaded Model
+## Daily server launcher
 
-Models downloaded with `-hf` are typically cached under `~/.cache/huggingface/hub/`.
-
-For the `ggml-org/gemma-3-1b-it-GGUF` example above, remove the cached model with:
-
-```sh
-rm -rf ~/.cache/huggingface/hub/models--ggml-org--gemma-3-1b-it-GGUF
-```
-
-## Run The Local Server
-
-This repo includes a small wrapper that makes `llama-server` the default out-of-the-box path.
-
-For `zsh`, add an alias to `~/.zshrc` that points to this script:
+This repository includes `run-llama-server.sh`. For a `zsh` alias, add this
+line with the absolute path to your clone:
 
 ```sh
-# Add this line to ~/.zshrc, then replace [path-to-your-local-ai-repo] with your local clone path.
-alias run-llama-server='[path-to-your-local-ai-repo]/llama-cpp/run-llama-server.sh'
-
+alias run-llama-server='/absolute/path/to/local-ai/llama-cpp/run-llama-server.sh'
 source ~/.zshrc
 ```
 
-Then start the launcher with:
+Start it with:
 
 ```sh
 run-llama-server
 ```
 
-What it does:
+The launcher:
 
-- Lists downloaded `llama.cpp` models
-- Lets you choose one from a numbered menu
-- Starts `llama-server` (an OpenAI-compatible local HTTP server) on port `8080` with `--offline` (only starts models already present in the local cache)
+- reads downloaded models from `llama-server --cache-list`;
+- presents a numbered selection menu;
+- starts the selected model with `llama-server -hf ... --offline --port 8080`;
+  and
+- prevents accidental network downloads during the server launch.
 
-After launch, use:
+After startup:
 
-- Browser UI: `http://127.0.0.1:8080`
-- API endpoint: `http://127.0.0.1:8080/v1/chat/completions`
+- browser UI: `http://127.0.0.1:8080`
+- chat API: `http://127.0.0.1:8080/v1/chat/completions`
 
-### Optional arguments:
+Use a hardware flag only when it matches the current Mac:
 
 ```sh
 run-llama-server --m4-48gb
 run-llama-server --m2-16gb
 ```
 
-These flags apply optimized parameters for specific hardware. See the full breakdown:
+The flags and their current starting commands are documented in:
 
-| Hardware | Config |
+| Hardware | Profile |
 | --- | --- |
-| MacBook Pro M4 Max 48GB | [hardware/m4-48gb.md](./hardware/m4-48gb.md) |
-| MacBook Air M2 16GB | [hardware/m2-16gb.md](./hardware/m2-16gb.md) |
+| M4 Max with 48 GB | [hardware/m4-48gb.md](./hardware/m4-48gb.md) |
+| base M2 with 16 GB | [hardware/m2-16gb.md](./hardware/m2-16gb.md) |
 
-### Run Manually
+These profiles are starting/reference configurations, not universal defaults.
+The launcher behavior and flags are intentionally simple; use the shared
+[qualification guide](../docs/tuning.md) to measure settings for a new
+machine/workload before promoting them.
 
-If you want to skip the launcher, you can still start the server manually with an exact cached model:
+## Run the server manually
+
+To skip the menu, use a known cached repository and keep offline mode enabled:
 
 ```sh
 llama-server -hf ggml-org/gemma-3-1b-it-GGUF --offline --port 8080
 ```
 
-## Models To Try
+## Runtime references
 
-These are useful starting points for local testing:
+- [GGUF, Hugging Face, and tuning](./gguf-and-tuning.md)
+- [llama.cpp parameters](./llama-cpp-parameters.md)
+- [`llama.cpp` hardware profiles](./hardware)
+- [Runtime tuning and qualification](../docs/tuning.md)
 
-| Model | Good For | Example |
-| --- | --- | --- |
-| [`ggml-org/gemma-3-1b-it-GGUF`](https://huggingface.co/ggml-org/gemma-3-1b-it-GGUF) | Fast local testing and basic prompting | `llama-cli -hf ggml-org/gemma-3-1b-it-GGUF` |
-| [`unsloth/Qwen3.6-27B-GGUF`](https://huggingface.co/unsloth/Qwen3.6-27B-GGUF) | Strong all-around Qwen 3.6 for coding and tool use (best on 32GB+ RAM) | `llama-cli -hf unsloth/Qwen3.6-27B-GGUF:UD-Q6_K_XL` |
-| [`unsloth/Qwen3.6-35B-A3B-GGUF`](https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF) | MoE Qwen 3.6 variant — stronger reasoning and coding than 27B, fits well on 48GB with Q5/Q6 quants | `llama-cli -hf unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q6_K_XL` |
+## Troubleshooting
 
-## Learn More
+- **No cached models:** run `llama-server --cache-list` and download a GGUF
+  artifact with `llama-cli -hf ...` first.
+- **Model load failure:** check the exact GGUF file, chat-template support, and
+  available memory before changing server flags.
+- **Port 8080 is busy:** inspect it with
+  `lsof -nP -iTCP:8080 -sTCP:LISTEN` before stopping anything.
+- **Memory pressure grows:** lower context or batch settings, choose a smaller
+  quantization, or qualify a more conservative profile for this Mac.
 
-| Resource | Covers |
-| --- | --- |
-| [Hugging Face And Tuning](./hugging-face-and-tuning.md) | Model names, quant choices, context size, and common `llama-server` tuning flags |
-| [llama.cpp Parameters](./llama-cpp-parameters.md) | Most useful `llama-server` runtime parameters reference |
+## Official references
 
-## Apple Silicon Note
-
-`llama.cpp` supports Metal on Apple Silicon, which makes it a strong fit for modern Macs.
-
-## Official References
-
-- [llama.cpp](https://github.com/ggml-org/llama.cpp)
-- [Install docs](https://github.com/ggml-org/llama.cpp/blob/master/docs/install.md)
-- [Build docs](https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md)
+- [`llama.cpp`](https://github.com/ggml-org/llama.cpp)
+- [Install documentation](https://github.com/ggml-org/llama.cpp/blob/master/docs/install.md)
+- [Build documentation](https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md)

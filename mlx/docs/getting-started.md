@@ -294,5 +294,5 @@ PyTorch is not needed. The Transformers package can use tokenizers and configura
 - [Hardware Qualification Guide](./guides/hardware-qualification.md)
 - [Upgrade And Benchmark Guide](./guides/upgrade-benchmark.md)
 - [mlx-lm Parameters](./reference/mlx-parameters.md)
-- [Hugging Face And Tuning](./reference/hugging-face-and-tuning.md)
+- [MLX Models And Compatibility](./reference/mlx-models.md)
 - [HTTP Benchmark Client](../scripts/benchmark-mlx-server.py)

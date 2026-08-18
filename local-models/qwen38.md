@@ -42,7 +42,7 @@ curl "$BASE_URL/v1/chat/completions" \
 
 For `MTPLX`, also inspect `/health` for `load_mtp`, `mtp_enabled`, `depth`, and `generation_mode`. Keep MTP and target-only AR as separate serving modes.
 
-See the [oMLX guide](../omlx/README.md), [MTPLX guide](../mtplx/README.md), and [runtime configuration tuning guide](../runtime-tuning.md) for runtime-specific setup and parameter tuning.
+See the [oMLX guide](../omlx/README.md), [MTPLX guide](../mtplx/README.md), and [runtime tuning and qualification guide](../docs/tuning.md) for runtime-specific setup and parameter tuning.
 
 ## Tune a working server
 
