@@ -4,7 +4,7 @@ Run Apple Silicon language models with [MTPLX](https://github.com/youssofal/MTPL
 
 This is the operational guide for installing MTPLX, selecting a compatible model, starting a local server, and tuning MTP, context, cache, and concurrency settings. The current reference machine is a **MacBook Pro — Apple M4 — 48 GB unified memory**. Values described as recommendations are starting points, not universal optima; measured values must include the machine, runtime, model, quantization, and serving mode.
 
-This repository is not a model-quality, model-ranking, or cross-runtime comparison project. After a server and model work, use the [runtime configuration tuning guide](../runtime-tuning.md) to choose settings for a stated workload.
+After the server and model work, use the [runtime tuning and qualification guide](../docs/tuning.md) to choose settings for a stated workload.
 
 ## Requirements
 
@@ -154,7 +154,7 @@ Before tuning fan control, scheduler modes, context, or draft depth:
 - read the authoritative `mtplx_stats` block from the final response chunk
 - record `prefill_tok_s`, `decode_tok_s`, `ttft_s`, cached tokens, peak memory, and `accepted_by_depth` / `drafted_by_depth`
 
-`MTPLX`'s [benchmarking guide](https://github.com/youssofal/MTPLX/blob/main/docs/benchmarking.md) documents cache clearing, capped reasoning requests, server-side timing, and thermal discipline. Use the [runtime configuration tuning guide](../runtime-tuning.md) to choose settings for this server without mixing cold and cached measurements.
+`MTPLX`'s [upstream measurement documentation](https://github.com/youssofal/MTPLX/tree/main/docs) covers cache clearing, capped reasoning requests, server-side timing, and thermal discipline. Use the [runtime tuning and qualification guide](../docs/tuning.md) to choose settings for this server without mixing cold and cached measurements.
 
 ## Troubleshooting
 
@@ -171,4 +171,4 @@ Before tuning fan control, scheduler modes, context, or draft depth:
 - [MTPLX architectures](https://github.com/youssofal/MTPLX/blob/main/docs/architectures.md)
 - [MTPLX API](https://github.com/youssofal/MTPLX/blob/main/docs/api.md)
 - [MacBook Pro M4 48 GB starting profile](./hardware/m4-48gb.md)
-- [Runtime configuration tuning guide](../runtime-tuning.md)
+- [Runtime tuning and qualification guide](../docs/tuning.md)

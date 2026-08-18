@@ -1,53 +1,82 @@
 # Local AI
 
-Practical notes for running local language-model servers and inference tools on Apple Silicon. The current primary reference machine is a **MacBook Pro — Apple M4 — 48 GB unified memory**; machine-specific settings are always labeled as starting points or measured results.
+A practical toolkit and notebook for running open-source language models on
+Apple Silicon with different local inference servers. Models, runtimes, and
+Macs change over time, so this repository keeps the common workflow separate
+from runtime-specific instructions and machine-specific settings.
 
-This repository is not a model-quality benchmark, model leaderboard, research notebook, or cross-runtime comparison project. It focuses on getting a useful local server running and tuning that server for a specific model, workload, and Mac.
+## Start here
 
-## Runtime guides
+- [Getting started](./docs/getting-started.md) — the model → runtime → smoke
+  test → profile path
+- [Terminology](./docs/terminology.md) — the concepts behind local inference
+- [Hugging Face and model artifacts](./docs/hugging-face.md) — repositories,
+  revisions, conversions, and compatibility
+- [Runtime tuning and qualification](./docs/tuning.md) — how to measure a
+  useful configuration on a particular Mac
 
-| Runtime | Use it to explore | Guide |
+If you already know which server you want, go directly to its guide below.
+
+## Choose a runtime
+
+| Runtime | Why you might choose it | Guide |
 | --- | --- | --- |
-| MLX / `mlx-lm` | MLX model workflows and local serving | [`./mlx`](./mlx) |
-| `llama.cpp` | GGUF models and Metal inference | [`./llama-cpp`](./llama-cpp) |
-| `oMLX` | Continuous batching and tiered KV caching | [`./omlx`](./omlx) |
-| `MTPLX` | Native MTP speculative decoding | [`./mtplx`](./mtplx) |
+| MLX / `mlx-lm` | MLX-native model workflows and a profile-aware launcher | [`mlx/`](./mlx) |
+| `llama.cpp` | GGUF artifacts, Metal inference, and a cache-aware server launcher | [`llama-cpp/`](./llama-cpp) |
+| oMLX | Model management, continuous batching, and tiered KV caching | [`omlx/`](./omlx) |
+| MTPLX | Native Multi-Token Prediction (MTP) serving when the artifact supports it | [`mtplx/`](./mtplx) |
 
-## Local model notes
-
-The [`local-models/`](./local-models) directory holds operational notes for specific model artifacts: compatibility requirements, chat templates, quantization details, context behavior, and runtime-specific loading instructions. These notes are not model reviews or quality rankings.
+No runtime is declared universally best. Artifact compatibility, workload,
+memory headroom, and the settings you can measure on your Mac determine the
+useful choice.
 
 ## Typical workflow
 
-1. Choose the runtime that supports the model format or serving feature you need.
-2. Follow its installation, model-selection, server, and API smoke-test instructions.
-3. Stop and resolve model-load, health, or memory errors before tuning parameters.
-4. Once one server and one model work, use the [runtime configuration tuning guide](./runtime-tuning.md) to test one parameter at a time for your workload.
-5. Record the resulting recommendation in the relevant hardware profile or model note, including the exact runtime, model revision, and flags.
+```text
+choose a model artifact and runtime
+  → install the runtime
+  → obtain/select a compatible artifact
+  → run a health, model-list, and small chat smoke test
+  → use a matching hardware profile or qualify this machine
+  → launch normally with the recorded settings
+```
 
-## What belongs here
+## Machine profiles
 
-- Installation and dependency notes for local inference runtimes.
-- Server launch commands, API examples, aliases, helper scripts, and hardware-specific presets.
-- Memory, context, KV-cache, quantization, batching, concurrency, and runtime-mode guidance.
-- Small, focused measurements that choose better parameters for one server/model/machine combination.
+A hardware profile is a runtime + hardware + workload configuration, with the
+model or model family included when it affects the settings. Checked-in values
+are measured/reference configurations or clearly labeled starting points; they
+are not universal defaults. A profile from an M4 with 48 GB does not make that
+machine a repository requirement, and its settings should not be copied to a
+different Mac without qualification.
 
-## What does not belong here
+- [MLX profiles and qualification](./mlx/docs/README.md)
+- [`llama.cpp` hardware profiles](./llama-cpp/hardware)
+- [oMLX starting profile](./omlx/hardware/m4-48gb.md)
+- [MTPLX starting profile](./mtplx/hardware/m4-48gb.md)
 
-- Best-model lists, intelligence or quality rankings, model-vs-model reviews, prompt or reasoning benchmarks, or cross-runtime leaderboards.
-- Large benchmark matrices whose purpose is to compare engines or model quality.
-- Historical experiment archives. Keep only current recommendations and clearly labeled operational notes.
+## Model notes
 
-## Shared rules
+[`local-models/`](./local-models/README.md) contains operational notes for
+specific model families and artifacts: compatibility facts, chat-template
+requirements, context behavior, and runtime-specific loading caveats. Add
+model-specific details there rather than making the root README depend on one
+release.
 
-- Run only one large model server at a time. MLX and `llama.cpp` use port `8080`; `oMLX` and `MTPLX` use `8000` by default.
-- Keep servers on `127.0.0.1` unless remote access is intentional and authenticated.
-- Confirm free disk and memory headroom before downloading a large model.
-- Record the exact model repository, revision, quantization, runtime version, serving mode, and tuning objective for every documented result.
+## Scope
 
-## Official references
+This is not:
 
+- a model-quality leaderboard or best-model list;
+- a model-vs-model benchmark archive; or
+- a cross-runtime performance competition.
+
+Measurements exist to answer a practical question: which settings run this
+model, through this server, on this machine, for this workload?
+
+## Official runtime references
+
+- [MLX LM](https://github.com/ml-explore/mlx-lm)
+- [`llama.cpp`](https://github.com/ggml-org/llama.cpp)
 - [oMLX](https://github.com/jundot/omlx)
 - [MTPLX](https://github.com/youssofal/MTPLX)
-- [MLX LM](https://github.com/ml-explore/mlx-lm)
-- [llama.cpp](https://github.com/ggml-org/llama.cpp)

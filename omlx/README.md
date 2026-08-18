@@ -4,7 +4,7 @@ Run MLX-compatible language models on Apple Silicon with [oMLX](https://github.c
 
 This is the operational guide for installing oMLX, loading a model, starting a local server, and choosing memory, context, cache, and concurrency settings. The current reference machine is a **MacBook Pro — Apple M4 — 48 GB unified memory**. Values described as recommendations are starting points, not universal optima; measured values must include the machine, runtime, model, quantization, and cache state.
 
-This repository is not a model-quality, model-ranking, or cross-runtime comparison project. After a server and model work, use the [runtime configuration tuning guide](../runtime-tuning.md) to choose settings for a stated workload.
+After the server and model work, use the [runtime tuning and qualification guide](../docs/tuning.md) to choose settings for a stated workload.
 
 ## Requirements
 
@@ -172,4 +172,4 @@ The SSD cache normally uses `~/.omlx/cache` and its automatic size is based on 1
 - [oMLX releases](https://github.com/jundot/omlx/releases)
 - [oMLX performance explorer](https://omlx.ai/benchmarks/performance)
 - [oMLX quantization notes](https://github.com/jundot/omlx/blob/main/docs/oQ_Quantization.md)
-- [Runtime configuration tuning guide](../runtime-tuning.md)
+- [Runtime tuning and qualification guide](../docs/tuning.md)
