@@ -21,7 +21,7 @@ Use this index to find the right document without reading the full reference set
 | Document | Use it for |
 | --- | --- |
 | [mlx-lm Parameters](./reference/mlx-parameters.md) | Server flags, request fields, cache behavior, and launcher passthrough |
-| [Hugging Face And Tuning](./reference/hugging-face-and-tuning.md) | Model terminology, quantization, context, cache, and downloads |
+| [MLX Models And Compatibility](./reference/mlx-models.md) | MLX artifact compatibility, conversion boundaries, and Hugging Face cache behavior |
 
 ## Hardware Profiles
 

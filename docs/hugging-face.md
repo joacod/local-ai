@@ -57,8 +57,8 @@ it is not a new model format and it does not guarantee that a different runtime
 can reuse the copy. Cache location, offline behavior, and removal commands are
 runtime-specific, so use the relevant guide:
 
-- [MLX model selection and compatibility](../mlx/docs/reference/hugging-face-and-tuning.md)
-- [`llama.cpp` GGUF and model loading](../llama-cpp/hugging-face-and-tuning.md)
+- [MLX model selection and compatibility](../mlx/docs/reference/mlx-models.md)
+- [`llama.cpp` GGUF and model loading](../llama-cpp/gguf-and-tuning.md)
 - [oMLX](../omlx/README.md)
 - [MTPLX](../mtplx/README.md)
 

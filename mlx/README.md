@@ -1,162 +1,174 @@
 # MLX
 
-Run local MLX-compatible models on Apple Silicon with [mlx-lm](https://github.com/ml-explore/mlx-lm).
+Run MLX-compatible language models on Apple Silicon with
+[`mlx-lm`](https://github.com/ml-explore/mlx-lm).
 
-## Start Here
+MLX is a good fit when you want MLX-native model conversions, an
+OpenAI-compatible local API, and a launcher that can apply a measured machine
+profile without hiding the underlying server options.
 
-New to local models on a Mac? Follow [Getting Started With MLX On A Mac](./docs/getting-started.md) for installation, the launcher alias, a small smoke test, model selection, machine qualification, and package upgrades.
+## Requirements
 
-For the shared model, runtime, and machine workflow, see the [runtime tuning and qualification guide](../docs/tuning.md).
+- Apple Silicon Mac
+- macOS and Python 3 available as `python3`
+- Git and enough disk space for the selected model artifact
+- unified-memory headroom for the model, context/cache, macOS, and other apps
 
-Quick start from this directory:
+For shared model and memory terminology, read the repository's
+[getting-started](../docs/getting-started.md), [terminology](../docs/terminology.md),
+and [Hugging Face artifact](../docs/hugging-face.md) notes.
+
+## Install or update
+
+From this directory:
 
 ```sh
 ./setup-mlx.sh
-./run-mlx-server.sh --model mlx-community/Qwen3-1.7B-4bit
 ```
 
-## Folder Layout
+The script creates `mlx/venv`, installs or upgrades `mlx-lm`, `mlx`, and
+`mlx-metal`, verifies `mlx_lm.server`, and prints the resolved versions. Model
+execution uses MLX; PyTorch is not required.
 
-| Path | Purpose |
-| --- | --- |
-| `README.md` | Short entry point and common commands |
-| `setup-mlx.sh` | Install or upgrade the local MLX environment |
-| `run-mlx-server.sh` | Interactive and profile-aware server launcher |
-| [`docs/`](./docs/README.md) | Getting started, guides, reference, and hardware profiles |
-| [`scripts/`](./scripts/) | Reusable benchmark and maintenance utilities |
-| `venv/` | Generated local Python environment (not committed) |
-
-## What MLX is
-
-MLX is Apple's machine learning framework designed for Apple Silicon.
-
-`mlx-lm` is the package used to run local language models with MLX.
-
-`mlx_lm.server` exposes an OpenAI-style local HTTP API on port `8080`, so you can connect local models to tools, scripts, and chat clients that speak the OpenAI Chat Completions format.
-
-## Install / Upgrade
-
-```sh
-cd mlx
-./setup-mlx.sh
-```
-
-This creates `mlx/venv` and installs or upgrades `mlx-lm`, `mlx`, and `mlx-metal`. It prints the resolved versions and verifies `mlx_lm.server` after upgrades.
-
-PyTorch is not required. Model execution uses MLX; the included benchmark client uses Transformers only for tokenizer and chat-template utilities.
-
-## Verify The Server Command
+## Verify the installation
 
 ```sh
 source venv/bin/activate
 mlx_lm.server --help
 ```
 
-If this works, `mlx-lm` is properly installed and ready to use.
+If this command works, the server entry point is installed.
 
-## Get A Model From Hugging Face
+## Select an MLX model
 
-The simplest path is to pass a Hugging Face repo to `--model`. On first run, `mlx-lm` downloads the model automatically. Later runs reuse the local Hugging Face cache.
+Pass an MLX-compatible Hugging Face repository or local model directory to
+`--model`:
 
 ```sh
 mlx_lm.server --model mlx-community/Qwen3-1.7B-4bit
 ```
 
-Hugging Face MLX models are commonly published under [huggingface.co/mlx-community](https://huggingface.co/mlx-community). An `mlx` tag does not guarantee compatibility with the installed `mlx-lm`; use the [Model Selection Research Brief](./docs/guides/model-selection.md) before downloading a larger workload model.
+MLX conversions are commonly published by
+[`mlx-community`](https://huggingface.co/mlx-community), but an `mlx` label does
+not guarantee support from the installed `mlx-lm`. Check the
+[MLX model compatibility reference](./docs/reference/mlx-models.md) and the
+[model-selection research brief](./docs/guides/model-selection.md) before a
+large download. Runtime-specific artifact concepts are also covered in the
+[shared Hugging Face notes](../docs/hugging-face.md).
 
-## Run The Local Server
+The first run downloads from Hugging Face. Later runs reuse the local cache.
 
-This repo includes a small launcher that makes starting the server the default out-of-the-box path.
+## First smoke test
 
-For `zsh`, add an alias to `~/.zshrc` that points to this script:
+Start the small public smoke-test model through the launcher:
 
 ```sh
-# Add this line to ~/.zshrc, then replace [path-to-your-local-ai-repo] with your local clone path.
-alias run-mlx-server='[path-to-your-local-ai-repo]/mlx/run-mlx-server.sh'
-
-source ~/.zshrc
+./run-mlx-server.sh --model mlx-community/Qwen3-1.7B-4bit
 ```
 
-Then start the launcher with:
+Leave it running and verify it from another terminal:
+
+```sh
+curl http://127.0.0.1:8080/health
+curl http://127.0.0.1:8080/v1/models
+curl http://127.0.0.1:8080/v1/chat/completions \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "messages": [{"role": "user", "content": "Reply with: MLX is ready."}],
+    "temperature": 0,
+    "max_tokens": 32,
+    "stream": false
+  }'
+```
+
+Stop the server with `Control-C`. `mlx_lm.server` exposes an API, not a browser
+chat UI.
+
+## Daily launcher
+
+The launcher activates `mlx/venv`, lets you choose a cached model from an
+interactive menu, accepts a Hugging Face repository or local path, and starts
+`mlx_lm.server` on `127.0.0.1:8080`.
+
+For a convenient `zsh` alias, add this line while inside this directory:
+
+```sh
+printf "\nalias run-mlx-server='%s/run-mlx-server.sh'\n" "$PWD" >> "$HOME/.zshrc"
+source "$HOME/.zshrc"
+```
+
+Then use:
 
 ```sh
 run-mlx-server
-```
-
-What it does:
-
-- activates `mlx/venv`
-- lets you pick a model from a numbered menu (or skip it with `--model`)
-- downloads from Hugging Face on first use if needed
-- starts `mlx_lm.server` on port `8080`
-
-After launch, use:
-
-- Health check: `http://127.0.0.1:8080/health`
-- Model list: `http://127.0.0.1:8080/v1/models`
-- API endpoint: `http://127.0.0.1:8080/v1/chat/completions`
-
-`mlx_lm.server` does not include a browser chat UI.
-
-### Optional arguments:
-
-```sh
-run-mlx-server --m4-48gb
-run-mlx-server --m2-16gb --model mlx-community/Qwen3-4B-Instruct-2507-4bit
-run-mlx-server --model mlx-community/Qwen3-1.7B-4bit
-run-mlx-server --model mlx-community/Qwen3.6-35B-A3B-4bit-DWQ
-run-mlx-server --m4-48gb --model mlx-community/Qwen3.6-35B-A3B-4bit-DWQ
+run-mlx-server --model ORG/MODEL
 run-mlx-server --model ./models/my-local-mlx-model
 ```
 
-- `--m2-16gb` applies measured single-agent defaults for a base M2 with 16 GB.
-- `--m4-48gb` applies latency-first cache, concurrency, and prefill defaults for an M4 Max with 48 GB.
-- `--model` skips the interactive menu and uses the specified Hugging Face repo or local path.
-- `--` passes all remaining options to `mlx_lm.server`, for example `-- --log-level DEBUG`.
-
-## Run Manually
+The launcher preserves these existing options:
 
 ```sh
-source venv/bin/activate
-mlx_lm.server --model mlx-community/Qwen3-1.7B-4bit --port 8080
+run-mlx-server --m2-16gb
+run-mlx-server --m4-48gb --model ORG/MODEL
+run-mlx-server --model ORG/MODEL -- --log-level DEBUG
 ```
 
-## Models To Try
+- `--model` skips the menu and accepts a Hugging Face repository or local path.
+- `--m2-16gb` applies the measured base-M2 16 GB single-agent settings and
+  warns when the current Mac does not match that hardware.
+- `--m4-48gb` applies the measured M4 Max 48 GB single-agent settings and warns
+  when the current Mac does not match that hardware.
+- `--` passes remaining options to `mlx_lm.server`; later scalar options can
+  override earlier launcher values.
 
-| Model | Good For | Example |
-| --- | --- | --- |
-| [`mlx-community/Qwen3-1.7B-4bit`](https://huggingface.co/mlx-community/Qwen3-1.7B-4bit) | Small, public general-purpose model for a first MLX launch | `run-mlx-server --model mlx-community/Qwen3-1.7B-4bit` |
-| [`mlx-community/Qwen3-4B-Instruct-2507-4bit`](https://huggingface.co/mlx-community/Qwen3-4B-Instruct-2507-4bit) | Text instruction model with a measured base-M2 16 GB profile | `run-mlx-server --m2-16gb --model mlx-community/Qwen3-4B-Instruct-2507-4bit` |
-| [`mlx-community/Qwen3.6-35B-A3B-4bit-DWQ`](https://huggingface.co/mlx-community/Qwen3.6-35B-A3B-4bit-DWQ) | Text-only MoE model for reasoning, coding, and tool use; mixed 4-bit and 8-bit quantization | `run-mlx-server --model mlx-community/Qwen3.6-35B-A3B-4bit-DWQ` |
+Use only the profile that matches the current hardware and workload. The
+launcher always binds locally and uses port `8080` unless a passthrough option
+changes it.
 
-The first model is a smoke test. The other models have machine-specific measured profiles; do not copy those profiles to different hardware without qualification. Use the [Model Selection Research Brief](./docs/guides/model-selection.md) to find a coding or workload model for another machine.
+## Profiles and qualification
 
-The separate [`mlx-community/Qwen3.6-35B-A3B-4bit`](https://huggingface.co/mlx-community/Qwen3.6-35B-A3B-4bit) vision-language conversion requires `mlx-vlm` for image input. This repository's `mlx_lm.server` launcher is text-only.
+| Profile or guide | What it contains |
+| --- | --- |
+| [M2 16 GB](./docs/hardware/m2-16gb.md) | Measured single-agent settings for one base M2 and one qualified model |
+| [M4 Max 48 GB](./docs/hardware/m4-max-48gb.md) | Measured single-agent settings for one M4 Max and one qualified model |
+| [Hardware qualification](./docs/guides/hardware-qualification.md) | How to measure a new machine, model, or workload |
+| [Upgrade qualification](./docs/guides/upgrade-benchmark.md) | How to requalify after MLX package changes |
 
-## Local Cache And Offline Use
+The profiles are reference results, not universal defaults. Qualification first
+confirms that the fixed model works, then measures one server setting at a time
+and records the current recommendation. The existing
+[`benchmark-mlx-server.py`](./scripts/benchmark-mlx-server.py) client measures a
+running server through HTTP; it does not start or stop the server.
 
-- First run with a Hugging Face repo downloads the model.
-- Later runs reuse the local Hugging Face cache.
+## Runtime-specific references
 
-The cache usually lives under the following directory. `HF_HUB_CACHE` or `HF_HOME` can override it.
+- [MLX model compatibility and cache behavior](./docs/reference/mlx-models.md)
+- [Server parameters and launcher passthrough](./docs/reference/mlx-parameters.md)
+- [Model selection research brief](./docs/guides/model-selection.md)
+- [MLX documentation index](./docs/README.md)
 
-```txt
-~/.cache/huggingface/hub/
-```
+## Local cache
 
-To remove a cached model, remove the corresponding `models--org--name` folder:
+The Hugging Face cache usually lives at `~/.cache/huggingface/hub/`; `HF_HUB_CACHE`
+or `HF_HOME` can change it. To inspect or remove a cached model, use the cache
+location and model-specific directory documented by the runtime. Removing a
+cache directory deletes local files; it does not change the remote repository.
 
-```sh
-rm -rf ~/.cache/huggingface/hub/models--mlx-community--Qwen3.6-35B-A3B-4bit-DWQ
-```
+## Troubleshooting
 
-## Apple Silicon Note
+- **Alias not found:** run `source "$HOME/.zshrc"` and check the alias's absolute
+  path.
+- **Port 8080 is busy:** inspect it with
+  `lsof -nP -iTCP:8080 -sTCP:LISTEN` before stopping anything.
+- **Model does not load:** verify that the artifact is MLX-compatible with the
+  installed `mlx-lm` and that enough memory is available.
+- **Memory pressure grows:** stop the server, reduce the model or workload,
+  close memory-heavy applications, and use only a profile qualified for this
+  Mac.
 
-MLX is designed specifically for Apple Silicon. It uses the same unified memory architecture that macOS provides, which makes it a natural fit for modern Macs.
+## Official references
 
-## Official References
-
-- [mlx-lm](https://github.com/ml-explore/mlx-lm)
-- [mlx-lm HTTP server](https://github.com/ml-explore/mlx-lm/blob/main/mlx_lm/SERVER.md)
+- [`mlx-lm`](https://github.com/ml-explore/mlx-lm)
+- [`mlx-lm` HTTP server](https://github.com/ml-explore/mlx-lm/blob/main/mlx_lm/SERVER.md)
 - [MLX](https://github.com/ml-explore/mlx)
 - [MLX Community models](https://huggingface.co/mlx-community)

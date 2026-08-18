@@ -1,27 +1,35 @@
-# llama.cpp Parameters
+# llama.cpp parameters
 
-This guide covers the most useful `llama-server` runtime parameters and what they do.
+Use `llama-server --help` from the installed version as the authoritative
+reference. These are the parameters used most often in the repository's
+starting commands.
 
-## Parameter Reference
-
-| Flag | Meaning |
+| Flag | Purpose |
 | --- | --- |
-| `-ngl` | GPU layers to offload. Higher values move more layers to the GPU for faster inference. |
-| `-fa` | Flash Attention. Enables a more efficient attention algorithm for faster speeds and better long-context quality. |
-| `--cache-type-k` | KV cache key quantization type. Higher precision keeps responses sharper over long conversations. |
-| `--cache-type-v` | KV cache value quantization type. Higher precision keeps responses sharper over long conversations. |
-| `-b` | Prompt batch size. Larger values speed up initial prompt processing. |
-| `-ub` | Upper batch size. Controls the maximum batch size during token generation. |
-| `-c` | Context size. Sets how many tokens the model can keep in working memory. |
-| `--jinja` | Enables Jinja chat template handling. Required for correct prompting with modern models like Qwen3.6. |
-| `--port` | Port the server listens on. Default is `8080`. |
-| `--offline` | Runs without network access. Only loads models from local cache. |
-| `-np` | Number of parallel streams. Default is `1`. |
+| `-ngl` / `--gpu-layers` | Number of model layers offloaded to the GPU/Metal backend. |
+| `-fa` / `--flash-attn` | Flash Attention mode when supported by the installed build. |
+| `--cache-type-k` | Representation used for KV-cache keys. |
+| `--cache-type-v` | Representation used for KV-cache values. |
+| `-b` | Prompt batch size; larger values can improve prefill but use more memory. |
+| `-ub` | Upper batch size used during generation. |
+| `-c` / `--ctx-size` | Context target in tokens. |
+| `-np` / `--parallel` | Number of parallel request slots/streams. |
+| `--jinja` | Enables Jinja chat-template processing when the model requires it. |
+| `--port` | Listening port; this repository uses `8080`. |
+| `--offline` | Prevents network downloads during server startup. |
 
-## Quantization Types For KV Cache
+Common KV-cache values include `q4_0`, `q8_0`, and `f16`. The choice trades
+memory, speed, and possible output effects; keep it tied to a measured
+workload. See [GGUF, Hugging Face, and tuning](./gguf-and-tuning.md) for the
+context and qualification boundary.
 
-Common values for `--cache-type-k` and `--cache-type-v`:
+The launcher profiles currently use:
 
-- `q4_0`: smallest cache, fastest, but may degrade quality over long chats
-- `q8_0`: strong quality, moderate memory use
-- `f16`: full precision, best quality, highest memory cost
+- M2 16 GB: `-ngl 99`, Flash Attention, `q8_0` KV cache, `-b 512`, `-ub 512`,
+  `-c 16384`, and `--jinja`.
+- M4 Max 48 GB: `-ngl 99`, Flash Attention, `q8_0` KV cache, `-b 2048`,
+  `-ub 2048`, `-c 131072`, and `--jinja`.
+
+Those are starting/reference values in the llama.cpp hardware documents, not
+universal defaults. Use the [runtime tuning guide](../docs/tuning.md) before
+promoting a changed value.
