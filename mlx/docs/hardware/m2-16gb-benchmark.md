@@ -1,6 +1,6 @@
-# M2 16GB Benchmarks
+# M2 16 GB benchmarks
 
-Measurements for `mlx-community/Qwen3-4B-Instruct-2507-4bit` on the hardware described in [MacBook Air M2 16GB](./m2-16gb.md).
+Measurements for `mlx-community/Qwen3-4B-Instruct-2507-4bit` on the hardware described in [MacBook Air M2 16 GB](./m2-16gb.md).
 
 ## Environment
 
@@ -19,7 +19,7 @@ Measurements for `mlx-community/Qwen3-4B-Instruct-2507-4bit` on the hardware des
 
 Each HTTP request used `benchmark-mlx-server.py` with deterministic sampling, disabled thinking, and a 128-token response limit. Reported 2k-16k results are medians of three unique cold trials after one warm-up. TTFT includes tokenization, prompt prefill, and first-token sampling.
 
-## Prefill Step
+## Prefill step
 
 | Prefill step | ~2,045 tokens | ~8,190 tokens | ~16,380 tokens |
 | ---: | ---: | ---: | ---: |
@@ -41,7 +41,7 @@ With prefill step `1024`:
 
 Longer context reduces both approximate prompt processing and decode throughput.
 
-## Prompt Cache
+## Prompt cache
 
 Repeating the same 8,189-token prompt with prefill step `1024` produced:
 

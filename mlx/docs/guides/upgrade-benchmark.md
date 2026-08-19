@@ -1,6 +1,6 @@
-# MLX Upgrade And Benchmark Guide
+# MLX upgrade and benchmark guide
 
-Use this guide after upgrading `mlx-lm`, `mlx`, or `mlx-metal` on a machine that already has a measured profile. For a new machine or model, use the [Hardware Qualification Guide](./hardware-qualification.md) instead.
+Use this guide after upgrading `mlx-lm`, `mlx`, or `mlx-metal` on a machine that already has a measured profile. For a new machine or model, use the [hardware qualification guide](./hardware-qualification.md) instead.
 
 ## Goal
 
@@ -8,11 +8,11 @@ Confirm that the installed packages are current, detect changed server options o
 
 The previous benchmark is a temporary comparison baseline. Compare against it while working, but replace superseded versions and results in the tracked documents. Do not append benchmark history.
 
-## Copy/Paste Agent Prompt
+## Copy/paste agent prompt
 
-Use the canonical [Requalify After An Upgrade](../getting-started.md#requalify-after-an-upgrade) prompt. It is kept in the beginner workflow so there is one copy/paste source for both new-machine and upgrade sessions.
+Use the canonical [requalify after an upgrade](../getting-started.md#requalify-after-an-upgrade) prompt. It is kept in the beginner workflow so there is one copy/paste source for both new-machine and upgrade sessions.
 
-## 1. Preserve A Temporary Baseline
+## 1. Preserve a temporary baseline
 
 Before editing, read the current machine guide and benchmark report. Save any comparison notes or raw values outside the tracked documents.
 
@@ -26,7 +26,7 @@ Record:
 
 Use this baseline only to evaluate the upgrade. The final tracked documents must contain the new environment and new measurements only.
 
-## 2. Inspect The Upgrade
+## 2. Inspect the upgrade
 
 Check the worktree and current environment before installation:
 
@@ -48,7 +48,7 @@ Compare stable releases on PyPI and read upstream release notes. Pay particular 
 
 Do not infer performance changes from release notes alone. Use them to select the tests.
 
-## 3. Upgrade And Verify
+## 3. Upgrade and verify
 
 Run:
 
@@ -60,7 +60,7 @@ mlx/venv/bin/mlx_lm.server --help
 
 Confirm the resolved package versions rather than assuming every transitive dependency was upgraded. Check that all configured launcher flags still exist and retain the expected meaning and defaults.
 
-## 4. Control The Environment
+## 4. Control the environment
 
 Keep these fixed across comparisons:
 
@@ -82,7 +82,7 @@ pmset -g batt
 
 Ensure port `8080` is free before starting a server. Do not run `mlx_lm.benchmark` while an HTTP server already holds the same large model.
 
-## 5. Start One Candidate Profile
+## 5. Start one candidate profile
 
 Start the server explicitly so the measured flags are visible. Example:
 
@@ -102,7 +102,7 @@ mlx/venv/bin/mlx_lm.server \
 
 Verify `http://127.0.0.1:8080/health` and confirm the final process flags. Benchmark one server configuration at a time. Stop and restart only the process you started when changing server parameters.
 
-## 6. Run The Shared Benchmark
+## 6. Run the shared benchmark
 
 The benchmark client drives a running server through streaming chat completions. It does not start, stop, or replace the server.
 
@@ -136,7 +136,7 @@ mlx/venv/bin/python mlx/scripts/benchmark-mlx-server.py \
 
 Use `--url` for another host or port and `--chat-template-kwargs '{}'` when the selected model does not use thinking controls. Run `mlx/venv/bin/python mlx/scripts/benchmark-mlx-server.py --help` for all options.
 
-## 7. Select Parameters
+## 7. Select parameters
 
 Prioritize:
 
@@ -147,7 +147,7 @@ Prioritize:
 
 Change one variable at a time. Do not call a setting optimal without measurements. Keep concurrency at `1/1` for one interactive agent unless overlapping-client tests justify another value.
 
-## 8. Compare, Then Replace
+## 8. Compare, then replace
 
 Compare the new medians with the temporary baseline and note meaningful improvements, regressions, or unchanged behavior in the final work report.
 
@@ -161,7 +161,7 @@ Update tracked documents using only the selected current environment:
 
 Remove superseded package versions, prior result tables, old power comparisons, and migration narrative. Git history already preserves old documents.
 
-## 9. Align And Verify
+## 9. Align and verify
 
 Update the launcher profile, parameter reference, machine guide, benchmark report, and README links when applicable.
 

@@ -1,14 +1,14 @@
-# MLX Hardware Qualification Guide
+# MLX hardware qualification guide
 
 Use this document as instructions for profiling a new Apple Silicon machine or retuning an MLX setup.
 
-For a first-time walkthrough and the copy/paste new-machine prompt, start with [Getting Started](../getting-started.md#qualify-a-new-mac). For an existing measured machine after a package upgrade, use the [MLX Upgrade And Benchmark Guide](./upgrade-benchmark.md).
+For a first-time walkthrough and the copy/paste new-machine prompt, start with [getting started](../getting-started.md#qualify-a-new-mac). For an existing measured machine after a package upgrade, use the [MLX upgrade and benchmark guide](./upgrade-benchmark.md).
 
 ## Goal
 
 Create a measured `mlx_lm.server` profile for one machine, model, and workload. Produce a short configuration guide and a separate benchmark report.
 
-## 1. Confirm Scope
+## 1. Confirm scope
 
 Establish before editing:
 
@@ -20,7 +20,7 @@ Establish before editing:
 
 Do not reuse another machine's preset without measurement.
 
-## 2. Inspect The System
+## 2. Inspect the system
 
 Read the launcher, setup script, parameter reference, and hardware guides. Check `git status` and preserve unrelated changes.
 
@@ -45,7 +45,7 @@ mlx/venv/bin/mlx_lm.server --help
 
 Record the chip, CPU/GPU cores, unified memory, macOS version, power mode, MLX working-set recommendation, and official Apple memory bandwidth.
 
-## 3. Inspect The Model
+## 3. Inspect the model
 
 Use Hugging Face metadata, `config.json`, and the installed `mlx-lm` model implementation to identify:
 
@@ -57,13 +57,13 @@ Use Hugging Face metadata, `config.json`, and the installed `mlx-lm` model imple
 
 Weight quantization does not determine KV-cache size. Derive a model-specific estimate when possible:
 
-```txt
+```text
 fixed cache state + bytes per token * cached tokens
 ```
 
 Verify estimates against runtime cache logs when available.
 
-## 4. Start Conservatively
+## 4. Start conservatively
 
 Use this baseline unless the workload requires otherwise:
 
@@ -76,7 +76,7 @@ Use this baseline unless the workload requires otherwise:
 
 Leave substantial memory below the MLX working-set recommendation. `--max-tokens` is a response limit, not context size. `--prompt-cache-bytes` is not a hard memory limit or OOM guard.
 
-## 5. Benchmark Safely
+## 5. Benchmark safely
 
 Do not run `mlx_lm.benchmark` beside a server holding the same large model; it may load a second copy. Either benchmark the HTTP server or stop it before using the CLI benchmark. Ask before stopping a user-started process.
 
@@ -90,7 +90,7 @@ pmset -g batt
 
 Stop if requests fail, swap grows materially, memory pressure stays unhealthy, or the machine becomes unresponsive.
 
-## 6. HTTP Protocol
+## 6. HTTP protocol
 
 Use streaming chat completions so TTFT and API token usage are available. Keep the model, prompt pattern, generation limit, sampling, thinking mode, tools, system prompt, and power mode fixed.
 
@@ -113,7 +113,7 @@ The client does not manage the server process. Restart the server yourself betwe
 
 Recommended matrix:
 
-```txt
+```text
 Prompt tokens: 2k, 8k, 16k, 32k
 Generation:    128 or 256 tokens
 Sampling:      deterministic
@@ -129,7 +129,7 @@ Measure:
 
 `prompt_tokens / TTFT` is only an approximate prefill rate because TTFT includes tokenization and first-token sampling.
 
-## 7. Tune One Variable At A Time
+## 7. Tune one variable at a time
 
 | Area | Test | Selection rule |
 | --- | --- | --- |
@@ -144,7 +144,7 @@ Keep concurrency at `1/1` for one active agent. Test High Power Mode only for su
 
 Do not change the wired-memory limit unless MLX reports that the model is too large for the available working set. Any limit must remain below total memory.
 
-## 8. Select The Profile
+## 8. Select the profile
 
 Prioritize:
 
@@ -155,36 +155,36 @@ Prioritize:
 
 Do not call a setting optimal without measurements. Record untested areas.
 
-## 9. Produce Two Documents
+## 9. Produce two documents
 
 Create `mlx/docs/hardware/<machine>.md` with current guidance only:
 
 ```md
-# Machine Name
+# Machine name
 ## Hardware
-## Recommended Command
+## Recommended command
 ## Settings
-## Model Cache Size
+## Model cache size
 ## Adjustments
-## Operating Tips
+## Operating tips
 ## References
 ```
 
 Create `mlx/docs/hardware/<machine>-benchmark.md` with evidence:
 
 ```md
-# Machine Benchmarks
+# Machine benchmarks
 ## Environment
-## Prefill Step
+## Prefill step
 ## Power
 ## Throughput
-## Prompt Cache
+## Prompt cache
 ## Memory
 ```
 
 Keep both documents current-only. Do not include superseded settings, package versions, old benchmark tables, upgrade narrative, or documentation history. Compare against previous results in the work report before replacing them; Git history preserves the old documents.
 
-## 10. Align And Verify
+## 10. Align and verify
 
 Update the launcher profile, parameter guide, relevant model guidance, and README links. Keep experimental server arguments available through launcher passthrough.
 

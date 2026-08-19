@@ -1,7 +1,7 @@
 # MLX
 
 Run MLX-compatible language models on Apple Silicon with
-[`mlx-lm`](https://github.com/ml-explore/mlx-lm).
+[mlx-lm](https://github.com/ml-explore/mlx-lm).
 
 MLX is a good fit when you want MLX-native model conversions, an
 OpenAI-compatible local API, and a launcher that can apply a measured machine
@@ -49,7 +49,7 @@ mlx_lm.server --model mlx-community/Qwen3-1.7B-4bit
 ```
 
 MLX conversions are commonly published by
-[`mlx-community`](https://huggingface.co/mlx-community), but an `mlx` label does
+[mlx-community](https://huggingface.co/mlx-community), but an `mlx` label does
 not guarantee support from the installed `mlx-lm`. Check the
 [MLX model compatibility reference](./docs/reference/mlx-models.md) and the
 [model-selection research brief](./docs/guides/model-selection.md) before a
@@ -137,7 +137,7 @@ changes it.
 The profiles are reference results, not universal defaults. Qualification first
 confirms that the fixed model works, then measures one server setting at a time
 and records the current recommendation. The existing
-[`benchmark-mlx-server.py`](./scripts/benchmark-mlx-server.py) client measures a
+[HTTP benchmark client](./scripts/benchmark-mlx-server.py) measures a
 running server through HTTP; it does not start or stop the server.
 
 ## Runtime-specific references
@@ -168,7 +168,7 @@ cache directory deletes local files; it does not change the remote repository.
 
 ## Official references
 
-- [`mlx-lm`](https://github.com/ml-explore/mlx-lm)
-- [`mlx-lm` HTTP server](https://github.com/ml-explore/mlx-lm/blob/main/mlx_lm/SERVER.md)
+- [mlx-lm](https://github.com/ml-explore/mlx-lm)
+- [mlx-lm HTTP server](https://github.com/ml-explore/mlx-lm/blob/main/mlx_lm/SERVER.md)
 - [MLX](https://github.com/ml-explore/mlx)
 - [MLX Community models](https://huggingface.co/mlx-community)

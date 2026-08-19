@@ -30,7 +30,7 @@ operational details.
 Choose a runtime guide:
 
 - [MLX](../mlx/README.md)
-- [`llama.cpp`](../llama-cpp/README.md)
+- [llama.cpp](../llama-cpp/README.md)
 - [oMLX](../omlx/README.md)
 - [MTPLX](../mtplx/README.md)
 
@@ -84,6 +84,6 @@ or model note.
   affected profile when necessary.
 - Keep cold, in-memory cached, and disk-restored runs separate.
 
-For model-specific details, add or update a note in
-[`local-models/`](../local-models/README.md) rather than changing this shared
+For model-specific details, add or update a note in the
+[local model notes](../local-models/README.md) rather than changing this shared
 workflow.

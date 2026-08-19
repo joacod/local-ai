@@ -118,7 +118,7 @@ intentional network boundary.
 
 ## Daily use, profiles, and qualification
 
-The [M4 48 GB starting profile](./hardware/m4-48gb.md) documents a conservative
+The [M4 Max 48 GB starting profile](./hardware/m4-48gb.md) documents a conservative
 serving lane, but it is not a completed benchmark report. MTPLX does not yet
 have a repository-wide reusable qualification/profile workflow. Use the
 [shared runtime tuning and qualification guide](../docs/tuning.md) to record
@@ -191,5 +191,5 @@ choose the question and keep cold and cached measurements separate.
 - [MTPLX quickstart](https://github.com/youssofal/MTPLX/blob/main/docs/quickstart.md)
 - [MTPLX architectures](https://github.com/youssofal/MTPLX/blob/main/docs/architectures.md)
 - [MTPLX API](https://github.com/youssofal/MTPLX/blob/main/docs/api.md)
-- [M4 48 GB starting profile](./hardware/m4-48gb.md)
+- [M4 Max 48 GB starting profile](./hardware/m4-48gb.md)
 - [Runtime tuning and qualification](../docs/tuning.md)

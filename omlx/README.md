@@ -13,8 +13,8 @@ For shared model, artifact, and qualification concepts, see the repository's
 ## Requirements
 
 - Apple Silicon Mac
-- the macOS and Python versions supported by the installed oMLX release;
-  the source path below currently documents Python 3.11–3.13
+- the macOS and Python versions supported by the installed oMLX release (the
+  source path below currently documents Python 3.11–3.13)
 - an MLX-format model supported by that release
 - enough disk and unified-memory headroom for the selected model and cache
 
@@ -125,7 +125,7 @@ network boundary.
 
 oMLX does not currently have a repository launcher or a checked-in reusable
 qualification command. Use `omlx serve`, the managed service, or the app for
-daily use. The [M4 48 GB starting profile](./hardware/m4-48gb.md) records a
+daily use. The [M4 Max 48 GB starting profile](./hardware/m4-48gb.md) records a
 conservative baseline; its values are not a completed measurement report.
 
 When no profile matches the machine, model, and workload, use the shared

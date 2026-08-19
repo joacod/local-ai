@@ -1,4 +1,4 @@
-# mlx-lm Parameters
+# mlx-lm parameters
 
 Use the installed command as the authoritative reference:
 
@@ -6,7 +6,7 @@ Use the installed command as the authoritative reference:
 mlx_lm.server --help
 ```
 
-## Server Parameters
+## Server parameters
 
 | Flag | Meaning |
 | --- | --- |
@@ -21,7 +21,7 @@ mlx_lm.server --help
 | `--prefill-step-size` | Tokens per prefill step; smaller values can reduce peak memory |
 | `--trust-remote-code` | Allows code from a trusted model repository |
 
-## M2 16GB Profile
+## M2 16 GB profile
 
 For one interactive coding agent using `Qwen3-4B-Instruct-2507-4bit`, use:
 
@@ -34,9 +34,9 @@ For one interactive coding agent using `Qwen3-4B-Instruct-2507-4bit`, use:
 --prefill-step-size 1024
 ```
 
-See [MacBook Air M2 16GB](../hardware/m2-16gb.md) for the measured context and memory limits.
+See [MacBook Air M2 16 GB](../hardware/m2-16gb.md) for the measured context and memory limits.
 
-## M4 Max 48GB Profile
+## M4 Max 48 GB profile
 
 For one interactive coding agent using `Qwen3.6-35B-A3B-4bit-DWQ`, start with:
 
@@ -49,9 +49,9 @@ For one interactive coding agent using `Qwen3.6-35B-A3B-4bit-DWQ`, start with:
 --prefill-step-size 4096
 ```
 
-See [MacBook Pro M4 Max 48GB](../hardware/m4-max-48gb.md) for hardware and cache details.
+See [MacBook Pro M4 Max 48 GB](../hardware/m4-max-48gb.md) for hardware and cache details.
 
-## Cache Behavior
+## Cache behavior
 
 Prompt caching reuses processed prefixes:
 
@@ -60,7 +60,7 @@ Prompt caching reuses processed prefixes:
 
 In `mlx-lm 0.31.3`, the byte budget is not enforced in every path and cannot shrink an active sequence. Cache size depends on model architecture, sequence length, and concurrency.
 
-## Request-Time Parameters
+## Request-time parameters
 
 Common API fields are `temperature`, `top_p`, `top_k`, `min_p`, `max_tokens`, `max_completion_tokens`, and `stream`.
 
@@ -77,7 +77,7 @@ curl http://127.0.0.1:8080/v1/chat/completions \
   }'
 ```
 
-## Launcher Passthrough
+## Launcher passthrough
 
 Use `--` to pass installed server options that the launcher does not manage directly:
 
