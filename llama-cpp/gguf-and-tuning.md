@@ -7,7 +7,7 @@ see [Hugging Face and model artifacts](../docs/hugging-face.md) and
 
 ## GGUF and `-hf`
 
-`llama.cpp` loads the GGUF format. A Hugging Face model family may have several
+llama.cpp loads the GGUF format. A Hugging Face model family may have several
 GGUF repositories or several `.gguf` files in one repository. They can differ
 in quantization, context metadata, chat-template behavior, and file size.
 

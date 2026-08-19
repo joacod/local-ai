@@ -71,7 +71,7 @@ local disk operation; it does not remove the Hugging Face repository.
   `mlx_lm.server`.
 - A quantization or architecture supported by one `mlx-lm` version may need a
   newer version. Run `mlx_lm.server --help` and a smoke test after upgrades.
-- Keep artifact compatibility notes in [`local-models/`](../../../local-models/README.md)
+- Keep artifact compatibility notes in the [local model notes](../../../local-models/README.md)
   when they apply to a model family rather than MLX in general.
 
 For current model research, use the [MLX model-selection brief](../guides/model-selection.md).

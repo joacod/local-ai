@@ -15,7 +15,7 @@ commands and flags stay in the runtime guides.
 ## Runtime guides
 
 - [MLX](../mlx/README.md) — MLX-compatible models and `mlx_lm.server`
-- [`llama.cpp`](../llama-cpp/README.md) — GGUF models and `llama-server`
+- [llama.cpp](../llama-cpp/README.md) — GGUF models and `llama-server`
 - [oMLX](../omlx/README.md) — an MLX server with model management and tiered caching
 - [MTPLX](../mtplx/README.md) — an MLX server with native MTP support
 

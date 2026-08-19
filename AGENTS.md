@@ -6,7 +6,7 @@ This repository is a practical toolkit and notebook for running open-source
 language models locally on Apple Silicon and finding useful configuration for a
 specific model, runtime, machine, and workload. Models, runtimes, and Macs
 will change; the structure should support additive notes without repeated
-reorganization. The maintained runtime scope is MLX, `llama.cpp`, oMLX, and
+reorganization. The maintained runtime scope is MLX, llama.cpp, oMLX, and
 MTPLX.
 
 It is not a model-quality leaderboard, cross-runtime benchmark project,
@@ -92,7 +92,7 @@ history is the historical archive.
 ## Preserve working runtime workflows
 
 Treat established automation conservatively. In particular, MLX and
-`llama.cpp` have working launcher workflows: do not rewrite, rename, or
+llama.cpp have working launcher workflows: do not rewrite, rename, or
 simplify them as documentation cleanup. Preserve public commands and flags
 unless changing them for a documented, concrete reason. Newer runtimes such as
 oMLX and MTPLX do not need artificial symmetry with MLX. Do not create
@@ -117,6 +117,18 @@ runtime directories look alike; add them when actual use justifies them.
   deeper guides, or qualification tooling only when actual use demonstrates
   their value. Prefer consistent concepts over identical directory trees.
 
+## Markdown conventions
+
+- Use sentence case for headings.
+- Use backticks for literal commands, package names, flags, paths, model IDs,
+  and other code identifiers. Keep product and runtime names plain in prose.
+- Use descriptive link text instead of raw directory names. Keep link labels
+  plain unless the linked text is itself a literal code identifier.
+- Use explicit language tags on fenced code blocks; use `text` for plain output
+  or configuration examples.
+- Use spaces in visible units such as `16 GB`; retain compact forms in filenames
+  and flags when they are part of the identifier.
+
 ## Change discipline and version-sensitive claims
 
 Verify installation commands, flags, supported formats, context limits, cache
@@ -133,7 +145,7 @@ canonical location, and link to it instead of duplicating it.
 
 - Documentation-only work must not run setup commands, install packages,
   download models, start servers, or run benchmark workloads.
-- Bind local servers to localhost by default. MLX and `llama.cpp` use port
+- Bind local servers to localhost by default. MLX and llama.cpp use port
   `8080`; oMLX and MTPLX use `8000`. Run only one large backend at a time when
   ports or resources conflict.
 - Check disk and unified-memory headroom before inference experiments, and

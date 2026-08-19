@@ -74,7 +74,7 @@ Use the runtime's own guide for commands and flags:
 
 - [MLX qualification](../mlx/docs/guides/hardware-qualification.md) and the
   [HTTP measurement client](../mlx/scripts/benchmark-mlx-server.py)
-- [`llama.cpp` hardware profiles](../llama-cpp/hardware)
+- [llama.cpp hardware profiles](../llama-cpp/hardware)
 - [oMLX starting profile](../omlx/hardware/m4-48gb.md)
 - [MTPLX starting profile](../mtplx/hardware/m4-48gb.md)
 
@@ -105,7 +105,7 @@ recommendation: <what to keep and why>
 
 Promote a useful result to the current runtime/hardware profile when it is
 reusable. Put artifact compatibility, prompt-format, and model-family details
-in [`local-models/`](../local-models/README.md). Keep profiles latest-only;
+in the [local model notes](../local-models/README.md). Keep profiles latest-only;
 Git history preserves older documents.
 
 ## Interpretation boundary

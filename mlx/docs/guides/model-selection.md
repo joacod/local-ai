@@ -1,12 +1,13 @@
-# MLX Model Selection Research Brief
+# MLX model selection research brief
 
 This document is a self-contained prompt for an AI with web access and, ideally, terminal access to the target Mac. Paste the entire document into the AI. Its task is to research current MLX models and recommend the best-supported options for this machine and workload.
 
 Do not rely on model names or recommendations already present in this repository. Model availability, conversions, runtime support, and community experience change quickly; perform fresh online research every time.
 
-## Task And Scope
+## Task and scope
 
-Research and rank instruction-tuned, text-only models that:
+Research and rank instruction-tuned, text-only models by operational fit for the
+target machine and workload:
 
 - are available in MLX format from `mlx-community` or another reputable publisher
 - are supported by the installed `mlx-lm`
@@ -16,11 +17,11 @@ Research and rank instruction-tuned, text-only models that:
 
 This task is research and recommendation only. Do not download models, start or stop servers, upgrade packages, edit files, tune parameters, or run benchmarks. End with an exact `run-mlx-server --model ORG/MODEL` command for the recommended model. The user will launch it and qualify its runtime parameters separately.
 
-If terminal access is unavailable, ask the user for the machine details and installed package versions required below. If workload requirements are missing, ask concise questions before ranking candidates.
+If terminal access is unavailable, ask the user for the machine details and installed package versions required below. If workload requirements are missing, ask concise questions before ranking candidates by operational fit.
 
 When terminal access is available, run commands from the repository root, the directory that contains `mlx/`.
 
-## 1. Inspect The Mac And Runtime
+## 1. Inspect the Mac and runtime
 
 Inspect and report the machine before searching for models:
 
@@ -36,7 +37,7 @@ mlx/venv/bin/mlx_lm.server --help
 
 Also identify the applications that must remain open. Unified memory is shared by the model, KV cache, MLX allocations, macOS, the IDE, browser, and every other process.
 
-## 2. Define The Workload
+## 2. Define the workload
 
 Determine the requirements that affect model choice:
 
@@ -50,23 +51,23 @@ Determine the requirements that affect model choice:
 
 A small model can be useful for completion and focused changes without being reliable for architecture decisions or large multi-file refactors. Do not turn "fits in memory" into a quality claim.
 
-## 3. Discover Current Candidates And Sources
+## 3. Discover current candidates and sources
 
 Search current sources rather than relying on memory or search-result summaries. Open and inspect the underlying pages.
 
 Start with:
 
-- current [`mlx-community` model activity](https://huggingface.co/organizations/mlx-community/activity/models)
+- current [mlx-community model activity](https://huggingface.co/organizations/mlx-community/activity/models)
 - Hugging Face searches for workload terms such as `coder`, `code`, `instruct`, `reasoning`, and `tool use`
 - the original model publisher's card, evaluations, license, and release notes
-- [`mlx-lm`](https://github.com/ml-explore/mlx-lm) source, releases, issues, and discussions for architecture support and known failures
+- [mlx-lm](https://github.com/ml-explore/mlx-lm) source, releases, issues, and discussions for architecture support and known failures
 - Hugging Face model discussions and issues for the exact conversion
 - relevant MLX and local-model communities, including comparable-machine reports in forums and communities such as `r/LocalLLaMA`
 - reproducible third-party benchmarks when their model revision, quantization, runtime, hardware, context, and test method are disclosed
 
 For repeatable research, the Hugging Face API can provide current metadata:
 
-```txt
+```text
 https://huggingface.co/api/models?author=mlx-community&search=coder&sort=downloads&direction=-1&limit=50&full=true
 https://huggingface.co/api/models?author=mlx-community&sort=lastModified&direction=-1&limit=100&full=true
 https://huggingface.co/api/models/ORG/MODEL?blobs=true
@@ -74,11 +75,11 @@ https://huggingface.co/api/models/ORG/MODEL?blobs=true
 
 Search beyond the newest models. Recent uploads have little adoption evidence, while older supported models can remain the better operational choice. Treat search snippets, generated summaries, popularity, and unsourced recommendation lists as discovery aids rather than evidence.
 
-## 4. Apply Hard Filters
+## 4. Apply hard filters
 
-Reject a candidate before ranking it when any required check fails.
+Reject a candidate before ranking it by operational fit when any required check fails.
 
-### Runtime And Architecture
+### Runtime and architecture
 
 - Fetch `config.json` and record `model_type` and `architectures`.
 - Check the installed `mlx_lm` loader and model implementations for that exact type or an explicit remapping.
@@ -88,14 +89,14 @@ Reject a candidate before ranking it when any required check fails.
 
 An unsupported architecture may download completely and then fail while the server loads the model. The HTTP process may continue answering `/health` even though generation is unavailable.
 
-### Task And Modality
+### Task and modality
 
 - Require an Instruct, Chat, or assistant-tuned model with a chat template.
 - Exclude Base models for normal coding-agent use.
 - This repository uses text-only `mlx_lm.server`. Exclude VLM, image, audio, video, OCR, embedding, and diffusion models.
 - Inspect repository files for processors or separate vision/audio weights when metadata is ambiguous.
 
-### Memory And Quantization
+### Memory and quantization
 
 - Use actual weight-file bytes from repository metadata, not parameter count alone.
 - Add headroom for MLX allocations, KV cache, prompts, macOS, and development applications.
@@ -104,9 +105,9 @@ An unsupported architecture may download completely and then fail while the serv
 
 For a 16 GB Mac used alongside an IDE, a roughly 4-5 GB 4-bit model is a conservative starting class. An 8-9 GB model may load but leaves much less room for useful context and other applications. These are screening heuristics, not measured limits.
 
-## 5. Evaluate Evidence
+## 5. Evaluate evidence
 
-Rank surviving candidates with evidence from different source types:
+Rank surviving candidates by operational fit with evidence from different source types:
 
 | Evidence | What it can establish |
 | --- | --- |
@@ -126,7 +127,7 @@ Use a shortlist instead of declaring one universal winner:
 | --- | --- | --- | ---: | --- | --- | --- |
 | `ORG/MODEL` | Why it matches | Verified facts | Exact or estimated | High/medium/low | Linked summary | Unknowns |
 
-## 6. Produce The Recommendation
+## 6. Produce the recommendation
 
 Return a self-contained report with these sections:
 
@@ -134,7 +135,7 @@ Return a self-contained report with these sections:
 2. **Workload assumptions**: tasks, languages, expected context, concurrency, and quality-versus-latency priority. Clearly mark assumptions the user did not provide.
 3. **Research date and sources**: link every important source and distinguish primary documentation, measured evidence, and community anecdotes.
 4. **Hard-filter results**: briefly list attractive candidates rejected for unsupported architecture, wrong modality, missing chat tuning, unsafe memory use, stale packaging, or weak evidence.
-5. **Ranked shortlist**: include at least three viable candidates when available, using the comparison table above.
+5. **Operational-fit shortlist**: include at least three viable candidates when available, using the comparison table above.
 6. **Recommendation**: select one model, explain why it is the best fit, state what it will likely do well, and state where its size or capability will fall short.
 7. **Runner-up**: identify when the alternative is preferable, such as trading responsiveness for quality or preserving more context headroom.
 8. **Exact next command**:

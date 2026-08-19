@@ -1,6 +1,6 @@
-# M4 Max 48GB Benchmarks
+# M4 Max 48 GB benchmarks
 
-Measurements for `mlx-community/Qwen3.6-35B-A3B-4bit-DWQ` on the hardware described in [M4 Max 48GB](./m4-max-48gb.md).
+Measurements for `mlx-community/Qwen3.6-35B-A3B-4bit-DWQ` on the hardware described in [M4 Max 48 GB](./m4-max-48gb.md).
 
 ## Environment
 
@@ -19,7 +19,7 @@ Measurements for `mlx-community/Qwen3.6-35B-A3B-4bit-DWQ` on the hardware descri
 
 Each cold HTTP request used `benchmark-mlx-server.py` with a unique prefix, deterministic sampling, disabled thinking, and a 128-token response limit. Results are medians of three cold trials. Time to first token (TTFT) includes tokenization, prompt prefill, and first-token sampling.
 
-## Prefill Step
+## Prefill step
 
 Measured on AC power:
 
@@ -39,7 +39,7 @@ With prefill step `4096`:
 - decode at 2k context: approximately 78 tokens/s
 - decode at 32k context: approximately 64 tokens/s
 
-## Prompt Cache
+## Prompt cache
 
 Repeating the same 8,188-token prompt produced:
 

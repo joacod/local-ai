@@ -1,4 +1,4 @@
-# MacBook Pro M4 Max 48GB
+# MacBook Pro M4 Max 48 GB
 
 Latency-first settings for one interactive coding or tool-using agent.
 
@@ -10,7 +10,7 @@ Latency-first settings for one interactive coding or tool-using agent.
 - 546 GB/s memory bandwidth
 - approximately 40.2 GB MLX recommended working set
 
-## Recommended Command
+## Recommended command
 
 ```sh
 mlx_lm.server \
@@ -43,11 +43,11 @@ run-mlx-server --m4-48gb --model mlx-community/Qwen3.6-35B-A3B-4bit-DWQ
 
 `--prompt-cache-bytes` is not a hard process-memory limit or OOM guard.
 
-## Model Cache Size
+## Model cache size
 
 For `Qwen3.6-35B-A3B-4bit-DWQ`, one sequence uses approximately:
 
-```txt
+```text
 61.4 MiB fixed state + 20 KiB per cached token
 ```
 
@@ -65,19 +65,19 @@ This excludes model weights, activations, prefill temporaries, allocator overhea
 - Long-prompt memory pressure: try `--prefill-step-size 2048`, then `1024` or `512`.
 - Keep `--prompt-concurrency 1` until peak memory is measured.
 
-## Operating Tips
+## Operating tips
 
 - Use AC power for sustained long-context work.
 - Close memory-heavy applications before large prompts.
 - Check pressure with `memory_pressure -Q`.
 - Do not change the wired-memory limit unless MLX reports that the model is too large for the available working set.
 
-See [M4 Max 48GB Benchmarks](./m4-max-48gb-benchmark.md) for measured TTFT, decode speed, cache reuse, and memory behavior.
+See [M4 Max 48 GB benchmarks](./m4-max-48gb-benchmark.md) for measured TTFT, decode speed, cache reuse, and memory behavior.
 
 ## References
 
-- [MLX-LM HTTP Model Server](https://github.com/ml-explore/mlx-lm/blob/main/mlx_lm/SERVER.md)
-- [MLX-LM repository](https://github.com/ml-explore/mlx-lm)
+- [mlx-lm HTTP server](https://github.com/ml-explore/mlx-lm/blob/main/mlx_lm/SERVER.md)
+- [mlx-lm repository](https://github.com/ml-explore/mlx-lm)
 - [MLX wired-memory limit](https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.set_wired_limit.html)
 - [Apple M4 Max MacBook Pro specifications](https://support.apple.com/en-us/121553)
 

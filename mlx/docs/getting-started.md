@@ -1,8 +1,8 @@
-# Getting Started With MLX On A Mac
+# Getting started with MLX on a Mac
 
 This is the starting point for running local language models on an Apple Silicon Mac. It covers first installation, the `run-mlx-server` alias, a small smoke test, machine-specific tuning, and future package upgrades.
 
-## What Gets Installed
+## What gets installed
 
 - `mlx`: Apple's machine-learning runtime for Apple Silicon
 - `mlx-metal`: the Metal backend used by MLX
@@ -21,19 +21,19 @@ PyTorch is not required. Model execution uses MLX.
 
 Model download size and runtime memory are different. Start with the small smoke-test model before selecting a larger model for real work.
 
-## Choose A Path
+## Choose a path
 
 | Situation | Follow |
 | --- | --- |
-| First installation on this Mac | [New Mac Setup](#new-mac-setup) |
-| Already installed; normal daily use | [Daily Use](#daily-use) |
-| Smoke test works; need a useful model | [Select A Model](#select-a-model) |
-| New machine needs measured parameters | [Qualify A New Mac](#qualify-a-new-mac) |
-| `mlx-lm`, `mlx`, or `mlx-metal` was upgraded | [Requalify After An Upgrade](#requalify-after-an-upgrade) |
+| First installation on this Mac | [New Mac setup](#new-mac-setup) |
+| Already installed; normal daily use | [Daily use](#daily-use) |
+| Smoke test works; need a useful model | [Select a model](#select-a-model) |
+| New machine needs measured parameters | [Qualify a new Mac](#qualify-a-new-mac) |
+| `mlx-lm`, `mlx`, or `mlx-metal` was upgraded | [Requalify after an upgrade](#requalify-after-an-upgrade) |
 
-## New Mac Setup
+## New Mac setup
 
-### 1. Open The Repository
+### 1. Open the repository
 
 Clone this repository if needed, then enter its `mlx` directory:
 
@@ -58,7 +58,7 @@ The script creates `mlx/venv`, upgrades the three MLX packages, verifies the ser
 
 Expected version output has this shape:
 
-```txt
+```text
 mlx-lm <version>
 mlx <version>
 mlx-metal <version>
@@ -66,7 +66,7 @@ mlx-metal <version>
 
 There is no separate `mlx-server` package. `mlx_lm.server` is part of `mlx-lm`.
 
-### 3. Add The Launcher Alias
+### 3. Add the launcher alias
 
 While still inside the repository's `mlx` directory, run this once:
 
@@ -83,7 +83,7 @@ run-mlx-server --help
 
 The alias points to this clone. If the repository moves, replace the alias in `~/.zshrc` with the new absolute path.
 
-### 4. Run A Small Smoke-Test Model
+### 4. Run a small smoke-test model
 
 Use this public, ungated model for the first launch:
 
@@ -95,7 +95,7 @@ The first launch downloads approximately 1 GB. Later launches reuse the Hugging 
 
 Do not apply another machine's hardware flag for this test. For example, use `--m4-48gb` only on the measured M4 Max 48 GB configuration.
 
-### 5. Verify The Server
+### 5. Verify the server
 
 Leave the server running and open another terminal:
 
@@ -117,13 +117,13 @@ curl http://127.0.0.1:8080/v1/chat/completions \
 
 Stop the server with `Control-C` in its terminal.
 
-## Select A Model
+## Select a model
 
-The smoke-test model proves that MLX works; it is not a recommendation for every workload. Paste the entire [Model Selection Research Brief](./guides/model-selection.md) into an AI with web access to inspect the exact Mac, research current models and community evidence, verify compatibility with the installed `mlx-lm`, and estimate memory headroom.
+The smoke-test model proves that MLX works; it is not a recommendation for every workload. Paste the entire [model selection research brief](./guides/model-selection.md) into an AI with web access to inspect the exact Mac, research current models and community evidence, verify compatibility with the installed `mlx-lm`, and estimate memory headroom.
 
-The research report should return a ranked shortlist, one scoped recommendation, and the exact launcher command. Start that model, then use the separate hardware-qualification prompt to measure better parameters for the fixed model and machine.
+The research report should return an operational-fit shortlist, one scoped recommendation, and the exact launcher command. Start that model, then use the separate hardware-qualification prompt to measure better parameters for the fixed model and machine.
 
-## Daily Use
+## Daily use
 
 Start the interactive launcher:
 
@@ -151,7 +151,7 @@ Useful endpoints:
 
 `mlx_lm.server` is an API server, not a browser chat interface.
 
-## Check For Current Versions
+## Check for current versions
 
 Running setup again is the normal upgrade command:
 
@@ -167,19 +167,19 @@ venv/bin/python -m pip index versions mlx
 venv/bin/python -m pip index versions mlx-metal
 ```
 
-## Qualify A New Mac
+## Qualify a new Mac
 
 Generic defaults are enough for the smoke test, but a real model and workload should be measured on each new machine. Do not copy another Mac's cache, concurrency, or prefill settings without benchmarking.
 
 The qualification process creates:
 
-- `docs/hardware/<machine>.md`: current hardware-specific command and parameters
-- `docs/hardware/<machine>-benchmark.md`: current measurements supporting those parameters
+- `mlx/docs/hardware/<machine>.md`: current hardware-specific command and parameters
+- `mlx/docs/hardware/<machine>-benchmark.md`: current measurements supporting those parameters
 - an optional named flag in `run-mlx-server.sh` when a reusable launcher profile is useful
 
 Replace the bracketed values and give this prompt to the coding agent from the repository root:
 
-```txt
+```text
 Qualify the currently running MLX model on this Apple Silicon Mac.
 
 Read mlx/docs/getting-started.md and mlx/docs/guides/hardware-qualification.md before changing anything. Also inspect the setup script, launcher, parameter reference, existing hardware profiles, and git status.
@@ -208,15 +208,15 @@ Requirements:
 Report the final launch command, measured conclusions, untested areas, files changed, and verification commands.
 ```
 
-The detailed measurement protocol is in the [Hardware Qualification Guide](./guides/hardware-qualification.md).
+The detailed measurement protocol is in the [hardware qualification guide](./guides/hardware-qualification.md).
 
-## Requalify After An Upgrade
+## Requalify after an upgrade
 
 Package upgrades can change Metal kernels, server defaults, caching, batching, memory use, or available options. Keep the current benchmark as a temporary baseline, run the affected measurements, report improvements or regressions, and then replace the tracked machine documents with the latest results only.
 
 Give this prompt to the coding agent from the repository root:
 
-```txt
+```text
 Upgrade and requalify the existing MLX setup for [machine profile].
 
 Read mlx/docs/getting-started.md, mlx/docs/guides/upgrade-benchmark.md, and mlx/docs/guides/hardware-qualification.md. Read the setup script, launcher, parameter reference, current machine guide, and current benchmark before changing anything.
@@ -243,11 +243,11 @@ Do not install PyTorch. MLX performs model execution; Transformers is used only 
 Report baseline comparisons in the final response, but leave only current versions and current results in tracked documents.
 ```
 
-The detailed upgrade workflow is in the [Upgrade And Benchmark Guide](./guides/upgrade-benchmark.md).
+The detailed upgrade workflow is in the [upgrade and benchmark guide](./guides/upgrade-benchmark.md).
 
 ## Troubleshooting
 
-### The Alias Is Not Found
+### The alias is not found
 
 Open a new terminal or run:
 
@@ -257,7 +257,7 @@ source "$HOME/.zshrc"
 
 Then verify `run-mlx-server --help`. Check that the absolute path in `~/.zshrc` still exists.
 
-### Port 8080 Is Busy
+### Port 8080 is busy
 
 See which process is listening:
 
@@ -267,7 +267,7 @@ lsof -nP -iTCP:8080 -sTCP:LISTEN
 
 Do not stop an unfamiliar process without confirming what it is.
 
-### Find A Running MLX Server
+### Find a running MLX server
 
 There is no fixed process ID. Find the current process with:
 
@@ -275,24 +275,24 @@ There is no fixed process ID. Find the current process with:
 pgrep -af 'mlx_lm.server'
 ```
 
-### The First Launch Is Slow
+### The first launch is slow
 
 The model is downloading or Metal kernels are warming up. Later launches use cached model files.
 
-### The Mac Runs Out Of Memory
+### The Mac runs out of memory
 
 Stop the server, choose a smaller model, close memory-heavy applications, and use only parameters measured for this machine. Check `memory_pressure -Q` before long-context tests.
 
-### A PyTorch Warning Appears
+### A PyTorch warning appears
 
 PyTorch is not needed. The Transformers package can use tokenizers and configuration files without PyTorch. The shared benchmark client suppresses that advisory.
 
-## Next References
+## Next references
 
-- [Documentation Index](./README.md)
-- [Model Selection Research Brief](./guides/model-selection.md)
-- [Hardware Qualification Guide](./guides/hardware-qualification.md)
-- [Upgrade And Benchmark Guide](./guides/upgrade-benchmark.md)
-- [mlx-lm Parameters](./reference/mlx-parameters.md)
-- [MLX Models And Compatibility](./reference/mlx-models.md)
-- [HTTP Benchmark Client](../scripts/benchmark-mlx-server.py)
+- [Documentation index](./README.md)
+- [Model selection research brief](./guides/model-selection.md)
+- [Hardware qualification guide](./guides/hardware-qualification.md)
+- [Upgrade and benchmark guide](./guides/upgrade-benchmark.md)
+- [mlx-lm parameters](./reference/mlx-parameters.md)
+- [MLX models and compatibility](./reference/mlx-models.md)
+- [HTTP benchmark client](../scripts/benchmark-mlx-server.py)

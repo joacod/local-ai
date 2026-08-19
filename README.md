@@ -21,10 +21,10 @@ If you already know which server you want, go directly to its guide below.
 
 | Runtime | Why you might choose it | Guide |
 | --- | --- | --- |
-| MLX / `mlx-lm` | MLX-native model workflows and a profile-aware launcher | [`mlx/`](./mlx) |
-| `llama.cpp` | GGUF artifacts, Metal inference, and a cache-aware server launcher | [`llama-cpp/`](./llama-cpp) |
-| oMLX | Model management, continuous batching, and tiered KV caching | [`omlx/`](./omlx) |
-| MTPLX | Native Multi-Token Prediction (MTP) serving when the artifact supports it | [`mtplx/`](./mtplx) |
+| MLX / mlx-lm | MLX-native model workflows and a profile-aware launcher | [MLX guide](./mlx/README.md) |
+| llama.cpp | GGUF artifacts, Metal inference, and a cache-aware server launcher | [llama.cpp guide](./llama-cpp/README.md) |
+| oMLX | Model management, continuous batching, and tiered KV caching | [oMLX guide](./omlx/README.md) |
+| MTPLX | Native Multi-Token Prediction (MTP) serving when the artifact supports it | [MTPLX guide](./mtplx/README.md) |
 
 No runtime is declared universally best. Artifact compatibility, workload,
 memory headroom, and the settings you can measure on your Mac determine the
@@ -46,18 +46,18 @@ choose a model artifact and runtime
 A hardware profile is a runtime + hardware + workload configuration, with the
 model or model family included when it affects the settings. Checked-in values
 are measured/reference configurations or clearly labeled starting points; they
-are not universal defaults. A profile from an M4 with 48 GB does not make that
+are not universal defaults. A profile from an M4 Max with 48 GB does not make that
 machine a repository requirement, and its settings should not be copied to a
 different Mac without qualification.
 
 - [MLX profiles and qualification](./mlx/docs/README.md)
-- [`llama.cpp` hardware profiles](./llama-cpp/hardware)
-- [oMLX starting profile](./omlx/hardware/m4-48gb.md)
-- [MTPLX starting profile](./mtplx/hardware/m4-48gb.md)
+- [llama.cpp hardware profiles](./llama-cpp/hardware)
+- [oMLX M4 Max 48 GB starting profile](./omlx/hardware/m4-48gb.md)
+- [MTPLX M4 Max 48 GB starting profile](./mtplx/hardware/m4-48gb.md)
 
 ## Model notes
 
-[`local-models/`](./local-models/README.md) contains operational notes for
+[Local model notes](./local-models/README.md) contain operational notes for
 specific model families and artifacts: compatibility facts, chat-template
 requirements, context behavior, and runtime-specific loading caveats. Add
 model-specific details there rather than making the root README depend on one
@@ -76,7 +76,7 @@ model, through this server, on this machine, for this workload?
 
 ## Official runtime references
 
-- [MLX LM](https://github.com/ml-explore/mlx-lm)
-- [`llama.cpp`](https://github.com/ggml-org/llama.cpp)
+- [mlx-lm](https://github.com/ml-explore/mlx-lm)
+- [llama.cpp](https://github.com/ggml-org/llama.cpp)
 - [oMLX](https://github.com/jundot/omlx)
 - [MTPLX](https://github.com/youssofal/MTPLX)

@@ -1,7 +1,7 @@
 # llama.cpp
 
 Run local GGUF artifacts from the terminal with
-[`llama.cpp`](https://github.com/ggml-org/llama.cpp).
+[llama.cpp](https://github.com/ggml-org/llama.cpp).
 
 `llama-cli` runs one-off prompts, while `llama-server` exposes a local
 OpenAI-compatible API. Choose this runtime when the model you want is
@@ -28,7 +28,7 @@ llama-server --help
 
 ## Select a GGUF artifact
 
-`llama.cpp` loads [GGUF](https://github.com/ggml-org/llama.cpp) files. Hugging
+llama.cpp loads GGUF files. Hugging
 Face repositories often publish several GGUF quantizations, so select the
 exact repository and quant when necessary:
 
@@ -96,8 +96,8 @@ The flags and their current starting commands are documented in:
 
 | Hardware | Profile |
 | --- | --- |
-| M4 Max with 48 GB | [hardware/m4-48gb.md](./hardware/m4-48gb.md) |
-| base M2 with 16 GB | [hardware/m2-16gb.md](./hardware/m2-16gb.md) |
+| M4 Max with 48 GB | [M4 Max 48 GB profile](./hardware/m4-48gb.md) |
+| base M2 with 16 GB | [base M2 16 GB profile](./hardware/m2-16gb.md) |
 
 These profiles are starting/reference configurations, not universal defaults.
 The launcher behavior and flags are intentionally simple; use the shared
@@ -116,7 +116,7 @@ llama-server -hf ggml-org/gemma-3-1b-it-GGUF --offline --port 8080
 
 - [GGUF, Hugging Face, and tuning](./gguf-and-tuning.md)
 - [llama.cpp parameters](./llama-cpp-parameters.md)
-- [`llama.cpp` hardware profiles](./hardware)
+- [llama.cpp hardware profiles](./hardware)
 - [Runtime tuning and qualification](../docs/tuning.md)
 
 ## Troubleshooting
@@ -132,6 +132,6 @@ llama-server -hf ggml-org/gemma-3-1b-it-GGUF --offline --port 8080
 
 ## Official references
 
-- [`llama.cpp`](https://github.com/ggml-org/llama.cpp)
+- [llama.cpp](https://github.com/ggml-org/llama.cpp)
 - [Install documentation](https://github.com/ggml-org/llama.cpp/blob/master/docs/install.md)
 - [Build documentation](https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md)
