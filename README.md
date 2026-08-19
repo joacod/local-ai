@@ -53,7 +53,7 @@ different Mac without qualification.
 - [MLX profiles and qualification](./mlx/docs/README.md)
 - [llama.cpp hardware profiles](./llama-cpp/hardware)
 - [oMLX M4 Max 48 GB starting profile](./omlx/hardware/m4-48gb.md)
-- [MTPLX M4 Max 48 GB starting profile](./mtplx/hardware/m4-48gb.md)
+- [MTPLX M4 Max 48 GB known-working baseline](./mtplx/hardware/m4-48gb.md)
 
 ## Model notes
 
