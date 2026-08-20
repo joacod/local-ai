@@ -1,20 +1,25 @@
-# Local model notes
+# Models I've used
 
-This is a small record of model versions and artifacts actually tried while
-developing the repository. It is not a model catalog, review site, leaderboard,
-or benchmark archive.
+This is a small collection of model artifacts that were actually used while
+developing this repository. It is not a catalog, review site, leaderboard, or
+cross-runtime comparison.
 
-A note should answer only the practical questions needed to run that artifact:
-the exact repository or variant, the runtime that loaded it, important
-compatibility requirements, the easiest tested starting path, and links to the
-runtime guide and any matching hardware profile.
+Each note records the exact artifact, runtime, machine, memory, experience, and
+compatibility caveats that are useful before a first run. Untested runtime/model
+combinations are not listed.
 
-## Models tried
+## Model notes
 
-| Model | Tested runtime(s) | Starting path |
+| Model | Runtime used | Start here |
 | --- | --- | --- |
-| [Qwen 3.6 35B-A3B](./qwen36.md) | MLX | [MLX guide](../mlx/README.md) |
-| [Qwen 3.8 27B](./qwen38.md) | MTPLX | [MTPLX guide](../mtplx/README.md) |
+| [Qwen 3 4B](./qwen3-4b.md) | MLX | A small known-used artifact for a 16 GB M2 Mac |
+| [Qwen 3.6 35B-A3B](./qwen36.md) | MLX | A known-used artifact for an M4 Max with 48 GB |
+| [Qwen 3.8 27B](./qwen38.md) | MTPLX | A complete native-MTP artifact used on an M4 Max with 48 GB |
 
-Untested runtime combinations are not listed as supported. Keep machine-specific
-settings in the relevant [hardware profile](../README.md#hardware-and-tuning).
+## Machine indexes
+
+- [Apple M2 with 16 GB](./machines/m2-16gb.md)
+- [Apple M4 Max with 48 GB](./machines/m4-max-48gb.md)
+
+A machine page is a reverse index, not duplicated runtime settings. Follow the
+linked model note for artifact details and the linked runtime README for commands.

@@ -1,30 +1,23 @@
 # Hugging Face and model artifacts
 
-Hugging Face hosts model files and the metadata around them. The important
-question for this repository is not only "which model is this?" but also:
+Hugging Face hosts model files and the metadata around them. The practical
+question is not only "which model is this?" but also:
 
 > Which exact artifact can this runtime load?
 
-## Repository, files, and revisions
+## Repositories, files, and revisions
 
-A repository can contain:
+A repository can contain weights, configuration, tokenizer and chat-template
+files, documentation, license information, and multiple revisions. The
+publisher may be the original model author or a community converter.
 
-- weights and configuration files;
-- tokenizer and chat-template files;
-- documentation and license information; and
-- one or more revisions, selected by commit or tag.
-
-The publisher may be the original model author or a community converter. A
-converter can publish a separate MLX or GGUF repository for the same model
-family.
-
-Inspect the actual file names, formats, sizes, and model card. Record a revision
-when a result needs to be reproduced. A repository name or model card example
-does not prove that every runtime supports the files.
+Inspect the actual files and model card. Record a revision when a result needs
+to be reproduced. A repository name or model-card example does not prove that
+every runtime supports its files.
 
 ## Why runtimes need different artifacts
 
-One model family may be published as:
+A family may be published as:
 
 ```text
 model family
@@ -34,44 +27,28 @@ model family
   -> runtime-specialized artifact
 ```
 
-These are related but not interchangeable downloads. They may differ in file
-format, quantization, tokenizer packaging, chat template, architecture support,
-or extra runtime files.
+These are related but not interchangeable downloads:
 
-- MLX servers expect an MLX-compatible model directory.
-- llama.cpp expects GGUF files.
-- MTPLX expects a complete artifact with matching native MTP weights.
-- oMLX uses model directories and its own supported MLX loading path.
-
-That is why the same Hugging Face repository cannot necessarily be given to
-every runtime. Use the runtime guide and a repository model note before starting
-a large download.
+- MLX servers expect an MLX-compatible model directory;
+- llama.cpp expects GGUF files;
+- MTPLX expects a complete artifact with matching native MTP components; and
+- oMLX uses its own supported MLX loading path.
 
 ## Before downloading
 
 1. Identify the exact repository and, when useful, its revision.
-2. Confirm the artifact format and architecture are supported by the runtime.
-3. Check tokenizer, chat-template, modality, and any runtime-specific files.
-4. Record the quantization or variant and actual file sizes.
-5. Leave memory and disk headroom for weights, activations, context/cache state,
-   macOS, and other applications.
-6. Read the model card and current runtime documentation for caveats.
+2. Confirm the format and architecture are supported by the runtime.
+3. Check tokenizer, chat-template, modality, and runtime-specific files.
+4. Record the quantization or variant and leave disk and memory headroom.
+5. Read the model card and the current runtime documentation for caveats.
 
-The [local model notes](../local-models/README.md) record repository-specific
-facts after they have been verified in this repository.
+The [local model notes](../local-models/) record repository-specific facts after
+they have been verified in this repository.
 
-## Cache behavior
+## Caches
 
-A runtime may download files into a shared Hugging Face cache or manage them in
-its own model directory. A cache is only a local copy of repository files; it is
-not a new model format and does not make the files compatible with another
-runtime. Cache locations, offline behavior, and removal commands are runtime
-specific:
-
-- [MLX model compatibility and cache behavior](../mlx/docs/reference/mlx-models.md)
-- [llama.cpp GGUF and model loading](../llama-cpp/gguf-and-tuning.md)
-- [oMLX](../omlx/README.md)
-- [MTPLX](../mtplx/README.md)
-
-For the difference between model weights, context, and cache state, see
-[Terminology](./terminology.md).
+A runtime may use a shared Hugging Face cache or its own model directory. A
+cache is only a local copy of repository files; it does not convert them for
+another runtime. Cache locations, offline behavior, and removal commands are
+runtime-specific, so use the selected [runtime README](../README.md#choose-a-runtime)
+for those details.
