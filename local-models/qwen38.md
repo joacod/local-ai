@@ -1,19 +1,19 @@
 # Qwen 3.8 27B
 
-## Known-used setup
+## Setup I used
 
 - **Artifact:** `Youssofal/Qwen3.8-27B-MTPLX-Optimized-Speed`
 - **Runtime:** MTPLX
 - **Variant:** 4-bit dynamic-quantized Optimized Speed build with matching
   native MTP weights
 - **Machine:** Apple M4 Max with 48 GB unified memory
-- **Experience:** known working for a local OpenAI-compatible server with native
+- **Experience:** I used this for a local OpenAI-compatible server with native
   MTP serving
 - **Recorded revision:** `57c0ede09cec77a02ff05f19cea5d81df7a20da6`
 
 Use the [MTPLX README](../mtplx/README.md) to install, pull, inspect, and start
 the artifact. The [M4 Max 48 GB machine index](./machines/m4-max-48gb.md) links
-this known-used combination.
+this setup I used.
 
 ## Compatibility
 

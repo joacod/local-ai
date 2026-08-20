@@ -51,6 +51,7 @@ concurrency, or other advanced settings.
 ## After the first run
 
 Read [Terminology](./terminology.md) when an unfamiliar term appears. Use the
-[model notes and machine indexes](../local-models/) to find known-used examples,
+[model notes and machine indexes](../local-models/) to find examples from
+setups I've used,
 and read [practical performance](./performance.md) before choosing a
 substantially larger artifact.

@@ -12,9 +12,9 @@ combinations are not listed.
 
 | Model | Runtime used | Start here |
 | --- | --- | --- |
-| [Qwen 3 4B](./qwen3-4b.md) | MLX | A small known-used artifact for a 16 GB M2 Mac |
-| [Qwen 3.6 35B-A3B](./qwen36.md) | MLX | A known-used artifact for an M4 Max with 48 GB |
-| [Qwen 3.8 27B](./qwen38.md) | MTPLX | A complete native-MTP artifact used on an M4 Max with 48 GB |
+| [Qwen 3 4B](./qwen3-4b.md) | MLX | A small artifact I used on a 16 GB M2 Mac |
+| [Qwen 3.6 35B-A3B](./qwen36.md) | MLX | An artifact I used on an M4 Max with 48 GB |
+| [Qwen 3.8 27B](./qwen38.md) | MTPLX | A complete native-MTP artifact I used on an M4 Max with 48 GB |
 
 ## Machine indexes
 
