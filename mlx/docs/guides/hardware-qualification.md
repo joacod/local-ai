@@ -1,12 +1,17 @@
 # MLX hardware qualification guide
 
-Use this document as instructions for profiling a new Apple Silicon machine or retuning an MLX setup.
+This is optional advanced material for profiling a new Apple Silicon machine or
+retuning an MLX setup. A model does not need to be qualified before it can be
+used.
 
-For a first-time walkthrough and the copy/paste new-machine prompt, start with [getting started](../getting-started.md#qualify-a-new-mac). For an existing measured machine after a package upgrade, use the [MLX upgrade and benchmark guide](./upgrade-benchmark.md).
+For a first-time setup, start with the [MLX guide](../../README.md). For an
+optional new-machine profile, use this guide; after a package upgrade, use the
+[MLX upgrade and benchmark guide](./upgrade-benchmark.md).
 
 ## Goal
 
-Create a measured `mlx_lm.server` profile for one machine, model, and workload. Produce a short configuration guide and a separate benchmark report.
+Create a useful `mlx_lm.server` profile for one machine, model, and workload.
+Record the evidence separately when a measured setting is worth keeping.
 
 ## 1. Confirm scope
 
@@ -96,7 +101,7 @@ Use streaming chat completions so TTFT and API token usage are available. Keep t
 
 Run one warm-up, then at least three cold trials per setting and report the median. Give cold prompts unique prefixes to prevent cache reuse. Use actual API `prompt_tokens`.
 
-Use the shared HTTP benchmark client rather than creating an ad hoc harness:
+Use the shared HTTP measurement client rather than creating an ad hoc harness:
 
 ```sh
 mlx/venv/bin/python mlx/scripts/benchmark-mlx-server.py \
@@ -107,7 +112,7 @@ mlx/venv/bin/python mlx/scripts/benchmark-mlx-server.py \
   --max-tokens 128
 ```
 
-The benchmark client loads tokenizer files from the local Hugging Face cache and does not download them. Cache the complete model and tokenizer before qualification.
+The measurement client loads tokenizer files from the local Hugging Face cache and does not download them. Cache the complete model and tokenizer before qualification.
 
 The client does not manage the server process. Restart the server yourself between parameter configurations and verify its final flags.
 

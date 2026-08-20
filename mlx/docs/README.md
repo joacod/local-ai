@@ -1,20 +1,21 @@
 # MLX documentation
 
-Use this index to find the right document without reading the full reference set.
+Use the [MLX guide](../README.md) for the fastest working path. These are
+optional details for model compatibility, profiles, and later tuning.
 
 ## Start here
 
 | Document | Use it for |
 | --- | --- |
-| [Getting started](./getting-started.md) | First install, launcher alias, smoke test, daily use, and copy/paste prompts |
+| [Workflow details](./getting-started.md) | Installation notes, daily use, upgrades, and advanced links |
 
 ## Guides
 
 | Document | Use it for |
 | --- | --- |
-| [Model selection](./guides/model-selection.md) | Pasteable AI brief for researching models for a specific Mac and workload |
-| [Hardware qualification](./guides/hardware-qualification.md) | Measuring a new Mac, model, or workload |
-| [Upgrade and benchmark](./guides/upgrade-benchmark.md) | Requalifying an existing profile after MLX package upgrades |
+| [Model selection](./guides/model-selection.md) | Compatibility and memory checks before choosing a larger model |
+| [Hardware qualification](./guides/hardware-qualification.md) | Optional measurement of a new Mac, model, or workload |
+| [Upgrade and benchmark](./guides/upgrade-benchmark.md) | Optional recheck after MLX package upgrades |
 
 ## Reference
 
@@ -27,15 +28,15 @@ Use this index to find the right document without reading the full reference set
 
 | Document | Use it for |
 | --- | --- |
-| [M2 16 GB](./hardware/m2-16gb.md) | Current measured base-M2 server profile |
-| [M2 16 GB benchmark](./hardware/m2-16gb-benchmark.md) | Current measurements supporting the M2 profile |
-| [M4 Max 48 GB](./hardware/m4-max-48gb.md) | Current measured server profile |
-| [M4 Max 48 GB benchmark](./hardware/m4-max-48gb-benchmark.md) | Current measurements supporting that profile |
+| [M2 16 GB](./hardware/m2-16gb.md) | Known working settings for one base M2 and one model |
+| [M2 16 GB measurements](./hardware/m2-16gb-benchmark.md) | Evidence behind that profile |
+| [M4 Max 48 GB](./hardware/m4-max-48gb.md) | Known working settings for one M4 Max and one model |
+| [M4 Max 48 GB measurements](./hardware/m4-max-48gb-benchmark.md) | Evidence behind that profile |
 
 ## Tools
 
 | Tool | Use it for |
 | --- | --- |
-| [HTTP benchmark client](../scripts/benchmark-mlx-server.py) | Cold-prompt, throughput, and prompt-cache measurements |
+| [HTTP measurement client](../scripts/benchmark-mlx-server.py) | Advanced HTTP measurements for a running server |
 
 Return to the [MLX README](../README.md) for installation and launcher commands.

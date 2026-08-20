@@ -1,66 +1,77 @@
 # Hugging Face and model artifacts
 
-Hugging Face is a publishing and hosting service used by model authors,
-organizations, and community converters. It is useful for finding files and
-metadata, but a repository name alone does not tell you whether an artifact
-works with the runtime you plan to use.
+Hugging Face hosts model files and the metadata around them. The important
+question for this repository is not only "which model is this?" but also:
 
-## What a repository contains
+> Which exact artifact can this runtime load?
 
-- **Organization or publisher:** the account that publishes and maintains the
-  repository. The original model author and a converter may publish different
-  repositories for the same family.
-- **Model repository:** a versioned collection of weights, configuration,
-  tokenizer files, chat-template metadata, documentation, and sometimes custom
-  code.
-- **Revision:** a commit or tag selecting one exact state of the repository.
-  Pin it when recording a reproducible result.
-- **Files:** the actual artifact pieces. Inspect their names, sizes, formats,
-  and metadata rather than relying only on the repository title.
-- **Model card:** the publisher's usage, compatibility, license, and conversion
-  notes. Treat it as an important source, not as proof that every runtime can
-  load the files.
+## Repository, files, and revisions
 
-A model family may look like this:
+A repository can contain:
+
+- weights and configuration files;
+- tokenizer and chat-template files;
+- documentation and license information; and
+- one or more revisions, selected by commit or tag.
+
+The publisher may be the original model author or a community converter. A
+converter can publish a separate MLX or GGUF repository for the same model
+family.
+
+Inspect the actual file names, formats, sizes, and model card. Record a revision
+when a result needs to be reproduced. A repository name or model card example
+does not prove that every runtime supports the files.
+
+## Why runtimes need different artifacts
+
+One model family may be published as:
 
 ```text
 model family
-  ├─ original publisher checkpoint
-  ├─ MLX conversion
-  ├─ GGUF conversion
-  └─ runtime-specialized checkpoint
+  -> original checkpoint
+  -> MLX conversion
+  -> GGUF conversion
+  -> runtime-specialized artifact
 ```
 
-These are related artifacts, not interchangeable downloads. A conversion may
-change the file format, quantization, tokenizer packaging, chat template, or
-runtime requirements. Check the target runtime's guide before downloading.
+These are related but not interchangeable downloads. They may differ in file
+format, quantization, tokenizer packaging, chat template, architecture support,
+or extra runtime files.
 
-## What to check before using an artifact
+- MLX servers expect an MLX-compatible model directory.
+- llama.cpp expects GGUF files.
+- MTPLX expects a complete artifact with matching native MTP weights.
+- oMLX uses model directories and its own supported MLX loading path.
 
-1. Identify the exact repository and revision.
-2. Confirm that the artifact format is supported by the selected runtime.
-3. Check the architecture, modality, tokenizer, and chat-template requirements.
-4. Record the quantization and actual file sizes.
-5. Leave memory and disk headroom for the runtime, context/cache state, macOS,
-   and other applications.
-6. Read the model card and current runtime documentation for compatibility
-   caveats.
+That is why the same Hugging Face repository cannot necessarily be given to
+every runtime. Use the runtime guide and a repository model note before starting
+a large download.
 
-The [local model notes](../local-models/README.md) are the place for
-repository-specific compatibility facts once you have verified them.
+## Before downloading
+
+1. Identify the exact repository and, when useful, its revision.
+2. Confirm the artifact format and architecture are supported by the runtime.
+3. Check tokenizer, chat-template, modality, and any runtime-specific files.
+4. Record the quantization or variant and actual file sizes.
+5. Leave memory and disk headroom for weights, activations, context/cache state,
+   macOS, and other applications.
+6. Read the model card and current runtime documentation for caveats.
+
+The [local model notes](../local-models/README.md) record repository-specific
+facts after they have been verified in this repository.
 
 ## Cache behavior
 
-A runtime may download an artifact into a local Hugging Face cache or manage it
-through its own model directory. A cache is a local copy of repository files;
-it is not a new model format and it does not guarantee that a different runtime
-can reuse the copy. Cache location, offline behavior, and removal commands are
-runtime-specific, so use the relevant guide:
+A runtime may download files into a shared Hugging Face cache or manage them in
+its own model directory. A cache is only a local copy of repository files; it is
+not a new model format and does not make the files compatible with another
+runtime. Cache locations, offline behavior, and removal commands are runtime
+specific:
 
-- [MLX model selection and compatibility](../mlx/docs/reference/mlx-models.md)
+- [MLX model compatibility and cache behavior](../mlx/docs/reference/mlx-models.md)
 - [llama.cpp GGUF and model loading](../llama-cpp/gguf-and-tuning.md)
 - [oMLX](../omlx/README.md)
 - [MTPLX](../mtplx/README.md)
 
-For the conceptual difference between model weights, context, and cache state,
-see [Terminology](./terminology.md).
+For the difference between model weights, context, and cache state, see
+[Terminology](./terminology.md).

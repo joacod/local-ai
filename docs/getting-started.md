@@ -1,89 +1,99 @@
 # Getting started
 
-This repository helps you run a local language model on Apple Silicon without
-having to learn every runtime's flags first. Use this path for the first
-working server; use the runtime guide for exact commands.
+This repository follows a simple journey:
+
+```text
+Apple Silicon Mac -> runtime -> model artifact -> local server -> request
+```
+
+Use a runtime guide for exact commands. Use these notes when you want to
+understand why the steps are separate.
 
 ## Before you start
 
 You need:
 
 - an Apple Silicon Mac;
-- enough free disk space for the selected model artifact and its cache;
-- enough unified-memory headroom for macOS, the server, context, and your other
-  applications; and
-- a model artifact supported by the runtime you choose.
+- free disk space for the artifact and its local cache; and
+- enough unified-memory headroom for macOS, the server, context, and other apps.
 
-If terms such as *artifact*, *quantization*, or *KV cache* are unfamiliar, read
-[Terminology](./terminology.md) and [Hugging Face and model artifacts](./hugging-face.md)
-first.
+Do not download a large file until you know its format and the runtime that can
+load it. A model family can have separate MLX, GGUF, and runtime-specialized
+artifacts. See [Hugging Face and model artifacts](./hugging-face.md) if that is
+new to you.
 
-## The normal workflow
+## Choose a starting path
 
-### 1. Choose a model and runtime
+The repository has two model/runtime combinations with documented successful
+runs:
 
-A model family can be published as several runtime-specific artifacts. Confirm
-the artifact format and the runtime's compatibility before downloading a large
-file. See the [model notes](../local-models/README.md) for repository-specific
-operational details.
+| Model | Runtime | Start with |
+| --- | --- | --- |
+| Qwen 3.6 35B-A3B MLX artifact | MLX | [Qwen 3.6 note](../local-models/qwen36.md) and [MLX guide](../mlx/README.md) |
+| Qwen 3.8 27B MTPLX artifact | MTPLX | [Qwen 3.8 note](../local-models/qwen38.md) and [MTPLX guide](../mtplx/README.md) |
 
-Choose a runtime guide:
+For a small, disposable first test, the [MLX guide](../mlx/README.md) uses
+`mlx-community/Qwen3-1.7B-4bit`.
 
-- [MLX](../mlx/README.md)
-- [llama.cpp](../llama-cpp/README.md)
-- [oMLX](../omlx/README.md)
-- [MTPLX](../mtplx/README.md)
+If you already have a different artifact, choose the guide that matches its
+format:
 
-Do not choose a runtime because it is universally fastest. Choose the one that
-supports the artifact and serving features your workload needs.
+- [MLX](../mlx/README.md) for MLX model directories;
+- [llama.cpp](../llama-cpp/README.md) for GGUF files;
+- [MTPLX](../mtplx/README.md) for complete artifacts with native MTP weights; or
+- [oMLX](../omlx/README.md) for the current reference path.
 
-### 2. Install the runtime and obtain the artifact
+## The first successful run
 
-Follow the selected runtime guide's requirements and installation steps. It
-should explain how to select or download a compatible artifact and how local
-cache behavior works.
+### 1. Install the runtime
 
-### 3. Run a smoke test
+Follow the selected runtime guide's quick start. MLX uses the repository's
+setup script, llama.cpp uses Homebrew, and MTPLX uses its native Homebrew CLI.
 
-Start with one model and one request. Confirm, in this order:
+### 2. Get or select the artifact
+
+Use the exact repository and variant recorded in a model note when one exists.
+The first download may be large. Later launches normally reuse a runtime cache
+or model directory.
+
+### 3. Start the server
+
+Use the runtime's normal launcher or native command. Keep the first run at the
+runtime defaults unless the guide identifies a tested hardware starting path.
+
+### 4. Make one small request
+
+Confirm:
 
 1. the server starts without a model-load error;
-2. its health endpoint reports healthy;
-3. its model-list endpoint returns the model ID; and
-4. a small chat request completes.
+2. the health endpoint responds;
+3. the model-list endpoint returns the served model; and
+4. a short chat request completes.
 
-The runtime guide documents the endpoint, port, and request shape. Fix load,
-health, model-list, or chat failures before changing context, cache,
-concurrency, batch, or speculative-decoding settings.
+The runtime guide gives the endpoint, port, and request shape. Fix a loading or
+request problem before changing context, cache, concurrency, batch, or MTP
+settings.
 
-### 4. Use a matching machine profile or qualify the machine
+### 5. Use it
 
-A hardware profile is a measured or explicitly classified starting
-configuration for a runtime, machine, workload, and sometimes a model. Use it
-only when the hardware and workload match its scope.
+Connect a browser UI, coding tool, or OpenAI-compatible client to the local API
+described by the runtime guide. Stop the server with the runtime's documented
+command when you are finished.
 
-If no profile matches, follow [Runtime tuning and qualification](./tuning.md).
-The [MLX qualification guide](../mlx/docs/guides/hardware-qualification.md)
-contains the repository's most complete example. Other runtimes can add
-profiles when their settings have actually been measured; do not create a
-profile just to make the directory trees look identical.
+## After the first run
 
-### 5. Launch normally
-
-Once the server is healthy and a useful configuration is recorded, use the
-runtime's launcher or normal command. Keep the exact model repository, revision,
-quantization, runtime version, workload, and selected settings with the profile
-or model note.
+- Use a [local model note](../local-models/README.md) to check exact artifact and
+  compatibility details.
+- Use a matching [hardware profile](../README.md#hardware-and-tuning) as an
+  optional starting point, not as a prerequisite.
+- Read [Terminology](./terminology.md) when terms such as quantization, GGUF,
+  KV cache, or MTP appear in a guide.
+- Use [optional runtime tuning](./tuning.md) only when the working setup needs a
+  different memory, latency, context, or concurrency trade-off.
 
 ## When changing models or Macs
 
-- A new model may require a different artifact or chat-template behavior even
-  when its family name is familiar.
-- A new Mac needs its own qualification unless a profile explicitly covers it.
-- A package upgrade can change defaults or memory behavior; requalify the
-  affected profile when necessary.
-- Keep cold, in-memory cached, and disk-restored runs separate.
-
-For model-specific details, add or update a note in the
-[local model notes](../local-models/README.md) rather than changing this shared
-workflow.
+A different model release may need a different artifact, tokenizer, chat
+template, or runtime. A different Mac may need more conservative settings. Keep
+those facts with the model note or hardware profile rather than treating one
+successful run as a universal default.

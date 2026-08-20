@@ -8,9 +8,12 @@ Confirm that the installed packages are current, detect changed server options o
 
 The previous benchmark is a temporary comparison baseline. Compare against it while working, but replace superseded versions and results in the tracked documents. Do not append benchmark history.
 
-## Copy/paste agent prompt
+## Before using this guide
 
-Use the canonical [requalify after an upgrade](../getting-started.md#requalify-after-an-upgrade) prompt. It is kept in the beginner workflow so there is one copy/paste source for both new-machine and upgrade sessions.
+Use the [MLX guide](../../README.md) for normal setup and the [hardware
+qualification guide](./hardware-qualification.md) when a new machine or model
+needs an optional profile. This guide is only for checking an existing profile
+after package upgrades.
 
 ## 1. Preserve a temporary baseline
 
@@ -104,7 +107,7 @@ Verify `http://127.0.0.1:8080/health` and confirm the final process flags. Bench
 
 ## 6. Run the shared benchmark
 
-The benchmark client drives a running server through streaming chat completions. It does not start, stop, or replace the server.
+The measurement client drives a running server through streaming chat completions. It does not start, stop, or replace the server.
 
 From the repository root:
 
