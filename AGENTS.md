@@ -18,7 +18,7 @@ Keep one canonical home for each fact:
 README.md                    short entry point and navigation
 docs/                        beginner concepts shared across runtimes
 local-models/                artifacts and models actually used here
-local-models/machines/       short reverse indexes for known-used combinations
+local-models/machines/       short reverse indexes for setups I've used
 <runtime>/                   install, model, server, and runtime behavior
 <runtime>/docs/              advanced details that belong to one runtime
 ```
@@ -40,8 +40,8 @@ Prefer a short canonical explanation plus a link over copied sections.
 
 ## Evidence and recommendations
 
-- Distinguish upstream behavior, a starting configuration, and a known-used
-  result. Do not call a setting tested, recommended, or optimized without
+- Distinguish upstream behavior, a starting configuration, and a result from a
+  setup I've used. Do not call a setting tested, recommended, or optimized without
   evidence for the stated model, artifact, runtime, machine, and workload.
 - Do not fabricate model recommendations or document runtime/model combinations
   that were not used here. Omit them or label limited reference information
@@ -55,7 +55,7 @@ Prefer a short canonical explanation plus a link over copied sections.
   workflows, tuning campaigns, exhaustive metrics, or cross-runtime comparison
   tables.
 - Do not create hardware profiles merely because a new machine exists. Add a
-  machine index only when it has a concrete known-used combination to link.
+  machine index only when it can link to a concrete setup I've used.
 - Do not add wrappers around already-friendly native CLIs. MTPLX and oMLX should
   use their upstream workflows directly.
 - Preserve the useful MLX and llama.cpp launchers, but keep them thin and
