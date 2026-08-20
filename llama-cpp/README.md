@@ -7,6 +7,22 @@ Run local GGUF artifacts from the terminal with
 OpenAI-compatible API. Choose this runtime when the model you want is
 available as GGUF or when you want llama.cpp's Metal and server controls.
 
+## Quick start
+
+Install llama.cpp, download a small GGUF, then use the repository launcher for
+the server:
+
+```sh
+brew install llama.cpp
+llama-cli -hf ggml-org/gemma-3-1b-it-GGUF -p "Reply with: llama.cpp is ready."
+cd llama-cpp
+./run-llama-server.sh
+```
+
+The launcher shows the cached model list, asks which model to run, and starts
+the server without downloading again. The [daily use](#daily-use) section shows
+the optional `run-llama-server` alias.
+
 For shared model and memory concepts, see the repository's
 [getting-started](../docs/getting-started.md), [terminology](../docs/terminology.md),
 and [Hugging Face artifact](../docs/hugging-face.md) notes.
@@ -26,7 +42,7 @@ llama-cli --help
 llama-server --help
 ```
 
-## Select a GGUF artifact
+## Get or select a GGUF artifact
 
 llama.cpp loads GGUF files. Hugging
 Face repositories often publish several GGUF quantizations, so select the
@@ -56,10 +72,11 @@ llama-cli -hf ggml-org/gemma-3-1b-it-GGUF -p "Reply with: llama.cpp is ready."
 Then confirm the selected artifact works with the server path in the next
 section.
 
-## Daily server launcher
+## Daily use
 
-This repository includes `run-llama-server.sh`. For a `zsh` alias, add this
-line with the absolute path to your clone:
+This repository includes `run-llama-server.sh` because cached-model selection
+and repeatable server startup are easier with a small helper. For a `zsh` alias,
+add this line with the absolute path to your clone:
 
 ```sh
 alias run-llama-server='/absolute/path/to/local-ai/llama-cpp/run-llama-server.sh'
@@ -85,6 +102,10 @@ After startup:
 - browser UI: `http://127.0.0.1:8080`
 - chat API: `http://127.0.0.1:8080/v1/chat/completions`
 
+It is the recommended daily path after a GGUF is cached. A manual
+`llama-server` command remains available below for users who want to set every
+flag themselves.
+
 Use a hardware flag only when it matches the current Mac:
 
 ```sh
@@ -101,10 +122,10 @@ The flags and their current starting commands are documented in:
 
 These profiles are starting/reference configurations, not universal defaults.
 The launcher behavior and flags are intentionally simple; use the shared
-[qualification guide](../docs/tuning.md) to measure settings for a new
-machine/workload before promoting them.
+[optional tuning guide](../docs/tuning.md) when a new machine or workload needs
+different settings.
 
-## Run the server manually
+## Manual server alternative
 
 To skip the menu, use a known cached repository and keep offline mode enabled:
 
@@ -117,7 +138,7 @@ llama-server -hf ggml-org/gemma-3-1b-it-GGUF --offline --port 8080
 - [GGUF, Hugging Face, and tuning](./gguf-and-tuning.md)
 - [llama.cpp parameters](./llama-cpp-parameters.md)
 - [llama.cpp hardware profiles](./hardware)
-- [Runtime tuning and qualification](../docs/tuning.md)
+- [Optional runtime tuning](../docs/tuning.md)
 
 ## Troubleshooting
 

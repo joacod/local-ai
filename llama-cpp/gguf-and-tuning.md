@@ -83,7 +83,7 @@ starting profiles.
 
 The repository's M2 and M4 documents contain starting commands for the launcher.
 They do not establish a universal context, batch, or cache setting. Before
-changing machines or workloads, use the [shared runtime qualification guide](../docs/tuning.md):
+changing machines or workloads, use the [shared optional tuning guide](../docs/tuning.md):
 confirm health and one chat request, then measure one variable at a time while
 recording the exact GGUF, revision, quantization, context, cache type, and
 power/thermal conditions.

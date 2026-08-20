@@ -7,14 +7,32 @@ draft model.
 
 Use MTPLX with a complete MTPLX-compatible artifact. The model's MTP weights
 must match its target model; an ordinary MLX conversion is not a substitute.
-A known-working M4 Max baseline is recorded in the [hardware
-profile](./hardware/m4-48gb.md). It is a working baseline, not an optimized or
-benchmarked profile.
+A known-working M4 Max setup is recorded in the [hardware
+profile](./hardware/m4-48gb.md). This repository does not add a launcher because
+MTPLX already provides model management and an interactive startup workflow.
 
-For shared model, artifact, and qualification concepts, see [getting
+For shared model, artifact, and optional tuning concepts, see [getting
 started](../docs/getting-started.md), [Hugging Face and model
 artifacts](../docs/hugging-face.md), and [runtime tuning and
-qualification](../docs/tuning.md).
+optional tuning](../docs/tuning.md).
+
+## Quick start
+
+Use the native MTPLX CLI:
+
+```sh
+brew install youssofal/mtplx/mtplx
+
+MODEL="Youssofal/Qwen3.8-27B-MTPLX-Optimized-Speed"
+
+mtplx pull "$MODEL"
+mtplx inspect "$MODEL" --json
+mtplx start
+```
+
+The model is a complete MTPLX artifact with matching native MTP weights. The
+first pull may take time and disk space; `inspect` should succeed before the
+server starts.
 
 ## Requirements
 
@@ -28,7 +46,7 @@ qualification](../docs/tuning.md).
 Use one supported installation path for the first experiment so the executable
 and version are unambiguous.
 
-## Install and check MTPLX
+## Install or update
 
 The Homebrew formula installs the `mtplx` command and its isolated runtime:
 
@@ -46,7 +64,7 @@ For an existing Homebrew installation, update it with:
 brew upgrade youssofal/mtplx/mtplx
 ```
 
-## Download and inspect a model
+## Get and inspect a model
 
 MTPLX needs a complete artifact with its matching native MTP weights. The
 example below uses the Qwen 3.8 artifact documented in the [model
@@ -138,12 +156,14 @@ curl -fsS http://127.0.0.1:8000/v1/chat/completions \
   }'
 ```
 
-When checking MTP serving, inspect `/health` and the final response statistics
-for fields such as `generation_mode`, `load_mtp`, `mtp_enabled`,
-`runtime_mtp_enabled`, `draft_head_installed`, and `depth`. Keep MTP and
-target-only autoregressive (AR) observations as separate serving modes.
+## Advanced MTP diagnostics
 
-## Daily use and qualification
+When you need to confirm the serving mode, inspect `/health` and the final
+response statistics for fields such as `generation_mode`, `load_mtp`,
+`mtp_enabled`, `runtime_mtp_enabled`, `draft_head_installed`, and `depth`. Keep
+MTP and target-only autoregressive (AR) observations as separate serving modes.
+
+## Daily use
 
 For daily use, start the server, list cached artifacts when needed, and stop the
 server when finished:
@@ -154,11 +174,11 @@ mtplx models
 mtplx stop
 ```
 
-Before changing draft depth, context, cache, fan, scheduler, or concurrency,
-use the [runtime tuning and qualification guide](../docs/tuning.md). Record the
-exact artifact, runtime version, workload, serving mode, and cache state for a
-reusable result. The [M4 Max 48 GB profile](./hardware/m4-48gb.md) records one
-known-working MTP baseline; do not copy its settings to another Mac without
+No repository launcher is currently provided because these native commands
+already cover installation, model management, startup, and shutdown. For an
+optional settings change after the basic run works, use the [runtime tuning
+guide](../docs/tuning.md). The [M4 Max 48 GB profile](./hardware/m4-48gb.md)
+records one known-working setup; do not copy its values to another Mac without
 verification.
 
 ## Troubleshooting
@@ -180,6 +200,6 @@ verification.
 - [MTPLX installation](https://github.com/youssofal/MTPLX/blob/main/INSTALL.md)
 - [MTPLX quickstart](https://github.com/youssofal/MTPLX/blob/main/docs/quickstart.md)
 - [MTPLX API](https://github.com/youssofal/MTPLX/blob/main/docs/api.md)
-- [Qwen 3.8 operational notes](../local-models/qwen38.md)
-- [M4 Max 48 GB known-working baseline](./hardware/m4-48gb.md)
-- [Runtime tuning and qualification](../docs/tuning.md)
+- [Qwen 3.8 model note](../local-models/qwen38.md)
+- [M4 Max 48 GB known-working profile](./hardware/m4-48gb.md)
+- [Optional runtime tuning](../docs/tuning.md)

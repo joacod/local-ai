@@ -1,13 +1,15 @@
-# MLX model selection research brief
+# MLX model selection checklist
 
-This document is a self-contained prompt for an AI with web access and, ideally, terminal access to the target Mac. Paste the entire document into the AI. Its task is to research current MLX models and recommend the best-supported options for this machine and workload.
+This optional document is a self-contained prompt for checking current MLX
+artifacts against a particular Mac and workload. It is not required for the
+first run and should not be treated as a permanent model catalog.
 
 Do not rely on model names or recommendations already present in this repository. Model availability, conversions, runtime support, and community experience change quickly; perform fresh online research every time.
 
 ## Task and scope
 
-Research and rank instruction-tuned, text-only models by operational fit for the
-target machine and workload:
+Research instruction-tuned, text-only models for operational fit on the target
+machine and workload:
 
 - are available in MLX format from `mlx-community` or another reputable publisher
 - are supported by the installed `mlx-lm`
@@ -15,9 +17,14 @@ target machine and workload:
 - match the requested coding, reasoning, context, and tool-use workload
 - have enough primary-source and community evidence to justify their download size
 
-This task is research and recommendation only. Do not download models, start or stop servers, upgrade packages, edit files, tune parameters, or run benchmarks. End with an exact `run-mlx-server --model ORG/MODEL` command for the recommended model. The user will launch it and qualify its runtime parameters separately.
+This task is research and recommendation only. Do not download models, start or
+stop servers, upgrade packages, edit files, tune parameters, or run benchmarks.
+End with an exact `run-mlx-server --model ORG/MODEL` command for one scoped
+candidate. The user will launch it and decide later whether tuning is needed.
 
-If terminal access is unavailable, ask the user for the machine details and installed package versions required below. If workload requirements are missing, ask concise questions before ranking candidates by operational fit.
+If terminal access is unavailable, ask the user for the machine details and
+installed package versions required below. If workload requirements are missing,
+ask concise questions before choosing a candidate by operational fit.
 
 When terminal access is available, run commands from the repository root, the directory that contains `mlx/`.
 
@@ -77,7 +84,7 @@ Search beyond the newest models. Recent uploads have little adoption evidence, w
 
 ## 4. Apply hard filters
 
-Reject a candidate before ranking it by operational fit when any required check fails.
+Reject a candidate before comparing operational fit when any required check fails.
 
 ### Runtime and architecture
 
@@ -107,7 +114,7 @@ For a 16 GB Mac used alongside an IDE, a roughly 4-5 GB 4-bit model is a conserv
 
 ## 5. Evaluate evidence
 
-Rank surviving candidates by operational fit with evidence from different source types:
+Compare surviving candidates by operational fit with evidence from different source types:
 
 | Evidence | What it can establish |
 | --- | --- |
@@ -136,7 +143,7 @@ Return a self-contained report with these sections:
 3. **Research date and sources**: link every important source and distinguish primary documentation, measured evidence, and community anecdotes.
 4. **Hard-filter results**: briefly list attractive candidates rejected for unsupported architecture, wrong modality, missing chat tuning, unsafe memory use, stale packaging, or weak evidence.
 5. **Operational-fit shortlist**: include at least three viable candidates when available, using the comparison table above.
-6. **Recommendation**: select one model, explain why it is the best fit, state what it will likely do well, and state where its size or capability will fall short.
+6. **Starting candidate**: select one model, explain why it fits this scope, state what it will likely do well, and state where its size or capability will fall short.
 7. **Runner-up**: identify when the alternative is preferable, such as trading responsiveness for quality or preserving more context headroom.
 8. **Exact next command**:
 
@@ -144,4 +151,4 @@ Return a self-contained report with these sections:
 run-mlx-server --model ORG/MODEL
 ```
 
-Include the exact expected download size, cache location, license, compatibility confidence, and unresolved risks before the command. Do not claim that a model is "best" without scoping the claim to this machine, workload, evidence, and research date.
+Include the exact expected download size, cache location, license, compatibility confidence, and unresolved risks before the command. Do not make universal claims from this machine, workload, evidence, or research date.

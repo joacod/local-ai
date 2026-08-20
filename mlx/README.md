@@ -3,9 +3,23 @@
 Run MLX-compatible language models on Apple Silicon with
 [mlx-lm](https://github.com/ml-explore/mlx-lm).
 
-MLX is a good fit when you want MLX-native model conversions, an
-OpenAI-compatible local API, and a launcher that can apply a measured machine
-profile without hiding the underlying server options.
+`mlx_lm.server` is a useful but low-level command. This repository keeps two
+small helpers because they make the environment, cached model selection, and
+repeatable server starts easier without hiding the underlying MLX options.
+
+## Quick start
+
+From this directory:
+
+```sh
+./setup-mlx.sh
+./run-mlx-server.sh --model mlx-community/Qwen3-1.7B-4bit
+```
+
+The first launch downloads the small smoke-test model. Leave the server running
+and use another terminal for the [API smoke test](#first-smoke-test). For a
+documented larger setup, use the [Qwen 3.6 model note](../local-models/qwen36.md)
+and its [M4 Max 48 GB profile](./docs/hardware/m4-max-48gb.md).
 
 ## Requirements
 
@@ -13,6 +27,9 @@ profile without hiding the underlying server options.
 - macOS and Python 3 available as `python3`
 - Git and enough disk space for the selected model artifact
 - unified-memory headroom for the model, context/cache, macOS, and other apps
+
+The setup and launcher scripts are intentionally part of the normal MLX path;
+they are not a second runtime or a replacement for `mlx_lm.server`.
 
 For shared model and memory terminology, read the repository's
 [getting-started](../docs/getting-started.md), [terminology](../docs/terminology.md),
@@ -39,7 +56,7 @@ mlx_lm.server --help
 
 If this command works, the server entry point is installed.
 
-## Select an MLX model
+## Get or select an MLX model
 
 Pass an MLX-compatible Hugging Face repository or local model directory to
 `--model`:
@@ -52,7 +69,7 @@ MLX conversions are commonly published by
 [mlx-community](https://huggingface.co/mlx-community), but an `mlx` label does
 not guarantee support from the installed `mlx-lm`. Check the
 [MLX model compatibility reference](./docs/reference/mlx-models.md) and the
-[model-selection research brief](./docs/guides/model-selection.md) before a
+[optional model selection checklist](./docs/guides/model-selection.md) before a
 large download. Runtime-specific artifact concepts are also covered in the
 [shared Hugging Face notes](../docs/hugging-face.md).
 
@@ -84,11 +101,11 @@ curl http://127.0.0.1:8080/v1/chat/completions \
 Stop the server with `Control-C`. `mlx_lm.server` exposes an API, not a browser
 chat UI.
 
-## Daily launcher
+## Daily use
 
-The launcher activates `mlx/venv`, lets you choose a cached model from an
-interactive menu, accepts a Hugging Face repository or local path, and starts
-`mlx_lm.server` on `127.0.0.1:8080`.
+The recommended repeat-use path is the launcher. It activates `mlx/venv`, lets
+you choose a cached model from an interactive menu, accepts a Hugging Face
+repository or local path, and starts `mlx_lm.server` on `127.0.0.1:8080`.
 
 For a convenient `zsh` alias, add this line while inside this directory:
 
@@ -114,9 +131,9 @@ run-mlx-server --model ORG/MODEL -- --log-level DEBUG
 ```
 
 - `--model` skips the menu and accepts a Hugging Face repository or local path.
-- `--m2-16gb` applies the measured base-M2 16 GB single-agent settings and
+- `--m2-16gb` applies the base-M2 16 GB single-agent profile settings and
   warns when the current Mac does not match that hardware.
-- `--m4-48gb` applies the measured M4 Max 48 GB single-agent settings and warns
+- `--m4-48gb` applies the M4 Max 48 GB single-agent profile settings and warns
   when the current Mac does not match that hardware.
 - `--` passes remaining options to `mlx_lm.server`; later scalar options can
   override earlier launcher values.
@@ -125,26 +142,40 @@ Use only the profile that matches the current hardware and workload. The
 launcher always binds locally and uses port `8080` unless a passthrough option
 changes it.
 
-## Profiles and qualification
+## Manual server alternative
+
+When you do not need the repository menu or profile flags, use `mlx_lm.server`
+directly:
+
+```sh
+source venv/bin/activate
+mlx_lm.server --model ORG/MODEL --host 127.0.0.1 --port 8080
+```
+
+The launcher is only a convenience layer around this command.
+
+## Optional hardware profiles
 
 | Profile or guide | What it contains |
 | --- | --- |
-| [M2 16 GB](./docs/hardware/m2-16gb.md) | Measured single-agent settings for one base M2 and one qualified model |
-| [M4 Max 48 GB](./docs/hardware/m4-max-48gb.md) | Measured single-agent settings for one M4 Max and one qualified model |
-| [Hardware qualification](./docs/guides/hardware-qualification.md) | How to measure a new machine, model, or workload |
-| [Upgrade qualification](./docs/guides/upgrade-benchmark.md) | How to requalify after MLX package changes |
+| [M2 16 GB](./docs/hardware/m2-16gb.md) | Known working single-agent settings for one base M2 and one model |
+| [M4 Max 48 GB](./docs/hardware/m4-max-48gb.md) | Known working single-agent settings for one M4 Max and one model |
+| [Hardware qualification](./docs/guides/hardware-qualification.md) | Optional measurement of a new machine, model, or workload |
+| [Upgrade qualification](./docs/guides/upgrade-benchmark.md) | Optional recheck after MLX package changes |
 
-The profiles are reference results, not universal defaults. Qualification first
-confirms that the fixed model works, then measures one server setting at a time
-and records the current recommendation. The existing
-[HTTP benchmark client](./scripts/benchmark-mlx-server.py) measures a
+These profiles are optional reference settings for the named Mac, model, and
+workload; they are not prerequisites or universal defaults. If no profile
+matches, use the runtime normally first. The advanced qualification guide
+confirms that a fixed model works, then measures one server setting at a time.
+The existing
+[HTTP measurement client](./scripts/benchmark-mlx-server.py) measures a
 running server through HTTP; it does not start or stop the server.
 
 ## Runtime-specific references
 
 - [MLX model compatibility and cache behavior](./docs/reference/mlx-models.md)
 - [Server parameters and launcher passthrough](./docs/reference/mlx-parameters.md)
-- [Model selection research brief](./docs/guides/model-selection.md)
+- [Model selection checklist](./docs/guides/model-selection.md)
 - [MLX documentation index](./docs/README.md)
 
 ## Local cache
@@ -163,8 +194,7 @@ cache directory deletes local files; it does not change the remote repository.
 - **Model does not load:** verify that the artifact is MLX-compatible with the
   installed `mlx-lm` and that enough memory is available.
 - **Memory pressure grows:** stop the server, reduce the model or workload,
-  close memory-heavy applications, and use only a profile qualified for this
-  Mac.
+  close memory-heavy applications, and use parameters appropriate for this Mac.
 
 ## Official references
 

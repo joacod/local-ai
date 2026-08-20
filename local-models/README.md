@@ -1,16 +1,20 @@
 # Local model notes
 
-Operational notes for specific model artifacts used with the runtimes in this repository.
+This is a small record of model versions and artifacts actually tried while
+developing the repository. It is not a model catalog, review site, leaderboard,
+or benchmark archive.
 
-These notes answer questions such as:
+A note should answer only the practical questions needed to run that artifact:
+the exact repository or variant, the runtime that loaded it, important
+compatibility requirements, the easiest tested starting path, and links to the
+runtime guide and any matching hardware profile.
 
-- Which repository, revision, quantization, and tokenizer should be loaded?
-- Does a runtime require a chat-template option or compatibility flag?
-- What model-specific serving behavior or runtime caveats should be noted?
-- Which runtime-specific model files or MTP heads must be present?
+## Models tried
 
-They are not model reviews, quality rankings, prompt benchmarks, or model-vs-model comparisons. Keep measured settings tied to a hardware profile and a reproducible runtime configuration.
+| Model | Tested runtime(s) | Starting path |
+| --- | --- | --- |
+| [Qwen 3.6 35B-A3B](./qwen36.md) | MLX | [MLX guide](../mlx/README.md) |
+| [Qwen 3.8 27B](./qwen38.md) | MTPLX | [MTPLX guide](../mtplx/README.md) |
 
-## Notes
-
-- [Qwen3.8 operational notes](./qwen38.md)
+Untested runtime combinations are not listed as supported. Keep machine-specific
+settings in the relevant [hardware profile](../README.md#hardware-and-tuning).
