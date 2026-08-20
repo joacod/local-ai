@@ -77,8 +77,17 @@ printf "\nalias run-mlx-server='%s/run-mlx-server.sh'\n" "$PWD" >> "$HOME/.zshrc
 source "$HOME/.zshrc"
 ```
 
-The launcher also accepts `--` followed by any additional options supported by
-the installed `mlx_lm.server`; see [server options](./docs/server-options.md).
+For the M4 Max 48 GB machine used in the repository, an explicit preset keeps
+the known starting parameters convenient:
+
+```sh
+./run-mlx-server.sh --m4-48gb --model ORG/MODEL
+```
+
+The preset is opt-in, warns when the current Mac does not match, and is not a
+universal default. The launcher also accepts `--` followed by any additional
+options supported by the installed `mlx_lm.server`; see
+[server options](./docs/server-options.md).
 
 ## More MLX help
 

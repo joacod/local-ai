@@ -5,6 +5,7 @@ set -euo pipefail
 invocation_dir="$PWD"
 cd "$(dirname "$0")"
 
+m4_48gb=false
 model=""
 server_args=()
 server_arg_count=0
@@ -23,12 +24,14 @@ Starts mlx_lm.server on port 8080.
 
 Options:
   --model <repo_or_path>   Use a Hugging Face repo or local model path
+  --m4-48gb                Apply the measured M4 Max 48 GB starting preset
   --                       Pass remaining options to mlx_lm.server
   -h, --help               Show this help message
 
 Examples:
   ./run-mlx-server.sh
   ./run-mlx-server.sh --model mlx-community/Qwen3-1.7B-4bit
+  ./run-mlx-server.sh --m4-48gb --model ORG/MODEL
   ./run-mlx-server.sh --model ./models/my-local-mlx-model
   ./run-mlx-server.sh --model ORG/MODEL -- --log-level DEBUG
 EOF
@@ -37,6 +40,10 @@ EOF
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
+    --m4-48gb)
+      m4_48gb=true
+      shift
+      ;;
     --model)
       if [ -z "${2:-}" ]; then
         echo "Error: --model requires a value." >&2
@@ -172,6 +179,23 @@ elif [[ "$model" == ../* ]]; then
 fi
 
 command=(mlx_lm.server --model "$model" --host 127.0.0.1 --port 8080)
+
+if [ "$m4_48gb" = true ]; then
+  memory_bytes="$(sysctl -n hw.memsize 2>/dev/null || true)"
+  chip="$(sysctl -n machdep.cpu.brand_string 2>/dev/null || true)"
+  if [ "$memory_bytes" != "51539607552" ] || [[ "$chip" != *"M4 Max"* ]]; then
+    echo "Warning: --m4-48gb is intended for an M4 Max with 48 GB unified memory." >&2
+  fi
+
+  command+=(
+    --max-tokens 8192
+    --prompt-cache-size 4
+    --prompt-cache-bytes 4000000000
+    --decode-concurrency 1
+    --prompt-concurrency 1
+    --prefill-step-size 4096
+  )
+fi
 
 if [ "$server_arg_count" -gt 0 ]; then
   command+=("${server_args[@]}")

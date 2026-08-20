@@ -60,7 +60,10 @@ Prefer a short canonical explanation plus a link over copied sections.
   use their upstream workflows directly.
 - Preserve the useful MLX and llama.cpp launchers, but keep them thin and
   beginner-friendly. Hardware-specific presets do not belong in the basic
-  launcher; concrete machine/model facts belong in `local-models/`.
+  path. An explicit, opt-in preset may remain when the maintainer uses it
+  repeatedly and its parameters are backed by a documented machine/model
+  result; warn on hardware mismatches and never present it as a universal
+  default. Concrete machine/model facts still belong in `local-models/`.
 - Prefer deleting obsolete complexity over preserving it indefinitely. Git
   history is the archive.
 

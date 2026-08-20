@@ -22,6 +22,33 @@ unless an option passed after `--` changes them.
 Use a setting only when the installed server supports it and the model/workload
 needs it. Start with the defaults before changing advanced options.
 
+## Optional M4 Max preset
+
+The launcher keeps an explicit `--m4-48gb` preset for the M4 Max with 48 GB
+unified memory. It comes from the measured
+`mlx-community/Qwen3.6-35B-A3B-4bit-DWQ` run recorded in this repository:
+
+```sh
+./run-mlx-server.sh \
+  --m4-48gb \
+  --model mlx-community/Qwen3.6-35B-A3B-4bit-DWQ
+```
+
+It applies:
+
+```text
+--max-tokens 8192
+--prompt-cache-size 4
+--prompt-cache-bytes 4000000000
+--decode-concurrency 1
+--prompt-concurrency 1
+--prefill-step-size 4096
+```
+
+The preset is opt-in, warns on a different Mac, and is a starting point rather
+than a universal setting. Arguments passed after `--` are appended last, so
+they can override these values when the installed server supports that option.
+
 ## Launcher passthrough
 
 Arguments after `--` are appended to `mlx_lm.server`:
