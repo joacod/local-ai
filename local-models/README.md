@@ -21,5 +21,5 @@ combinations are not listed.
 - [Apple M2 with 16 GB](./machines/m2-16gb.md)
 - [Apple M4 Max with 48 GB](./machines/m4-max-48gb.md)
 
-A machine page is a reverse index, not a duplicated runtime profile. Follow the
+A machine page is a reverse index, not duplicated runtime settings. Follow the
 linked model note for artifact details and the linked runtime README for commands.
