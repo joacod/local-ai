@@ -10,7 +10,6 @@
 - **Memory note:** prompts up to about 16k tokens were usable in the recorded
   setup; a 32k prompt caused substantial swap and is not a practical starting
   point on this machine.
-- **Recorded revision:** `50d427756c6b1b2fe0c0a10f67fbda1fc8e82c1b`
 
 Use the [MLX README](../mlx/README.md) to install the runtime and start the
 server. The [M2 16 GB machine index](./machines/m2-16gb.md) links this

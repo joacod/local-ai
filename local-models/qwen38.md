@@ -8,12 +8,12 @@
   native MTP weights
 - **Machine:** Apple M4 Max with 48 GB unified memory
 - **Experience:** I used this for a local OpenAI-compatible server with native
-  MTP serving
-- **Recorded revision:** `57c0ede09cec77a02ff05f19cea5d81df7a20da6`
+  MTP serving on MTPLX 2.9.0
 
-Use the [MTPLX README](../mtplx/README.md) to install, pull, inspect, and start
-the artifact. The [M4 Max 48 GB machine index](./machines/m4-max-48gb.md) links
-this setup I used.
+Use the [MTPLX README](../mtplx/README.md) to install, update or pull,
+inspect, and start the artifact. The
+[M4 Max 48 GB machine index](./machines/m4-max-48gb.md) links this setup I
+used.
 
 ## Compatibility
 

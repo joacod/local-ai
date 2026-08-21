@@ -71,8 +71,11 @@ Prefer a short canonical explanation plus a link over copied sections.
 
 When adding a model, record the exact artifact, variant or quantization, runtime,
 machine, memory, experience, compatibility caveats, and source link only when
-those facts are known from actual use. Add a machine-index row that links to the
-model page instead of duplicating configuration blocks.
+those facts are known from actual use. Keep model notes readable: do not add raw
+Hugging Face revision or commit IDs unless an exact snapshot is necessary to
+reproduce the result, and explain their purpose when retaining one. Add a
+machine-index row that links to the model page instead of duplicating
+configuration blocks.
 
 When adding a runtime, start with its README and native install/model/server
 workflow. Add deeper runtime docs only when an actual recurring question makes

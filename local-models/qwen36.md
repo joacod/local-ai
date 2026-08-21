@@ -7,7 +7,6 @@
 - **Variant:** 4-bit DWQ MLX artifact
 - **Machine:** MacBook Pro M4 Max with 48 GB unified memory
 - **Experience:** I used this for interactive local-server use on this Mac
-- **Recorded revision:** `73c707af4243243b18193444467872d20cff9399`
 
 Use the [MLX README](../mlx/README.md) to install and start the server. The
 [M4 Max 48 GB machine index](./machines/m4-max-48gb.md) links this artifact to the
