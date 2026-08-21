@@ -11,9 +11,10 @@ A repository can contain weights, configuration, tokenizer and chat-template
 files, documentation, license information, and multiple revisions. The
 publisher may be the original model author or a community converter.
 
-Inspect the actual files and model card. Record a revision when a result needs
-to be reproduced. A repository name or model-card example does not prove that
-every runtime supports its files.
+Inspect the actual files and model card. A revision can make a setup
+reproducible, but raw revision IDs are not normally useful in a beginner-facing
+model note; include one only when the exact snapshot matters. A repository name
+or model-card example does not prove that every runtime supports its files.
 
 ## Why runtimes need different artifacts
 
@@ -36,7 +37,8 @@ These are related but not interchangeable downloads:
 
 ## Before downloading
 
-1. Identify the exact repository and, when useful, its revision.
+1. Identify the exact repository and variant; use a revision only when it is
+   needed to reproduce a result.
 2. Confirm the format and architecture are supported by the runtime.
 3. Check tokenizer, chat-template, modality, and runtime-specific files.
 4. Record the quantization or variant and leave disk and memory headroom.

@@ -21,6 +21,13 @@ Update an existing Homebrew installation with:
 brew upgrade youssofal/mtplx/mtplx
 ```
 
+Check cached packs for updates and apply them when needed:
+
+```sh
+mtplx models --check
+mtplx models --update
+```
+
 ## Get and inspect a model
 
 The [Qwen 3.8 model note](../local-models/qwen38.md) records the complete
