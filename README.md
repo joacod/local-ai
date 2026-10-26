@@ -10,8 +10,6 @@ to learn by installing a runtime, starting a server, and trying a model.
   for setup and cached-model selection.
 - [llama.cpp](./llama-cpp/README.md) — use GGUF artifacts with the native
   `llama-server` and a cache-aware launcher.
-- [oMLX](./omlx/README.md) — try a managed MLX server with a model directory and
-  dashboard.
 - [MTPLX](./mtplx/README.md) — serve complete artifacts that include matching
   native MTP components.
 

@@ -19,7 +19,7 @@ used.
 
 This is a complete MTPLX-specific artifact. Its target weights and native MTP
 components must stay together; an ordinary MLX conversion is not a substitute.
-It is not documented here as tested with MLX, oMLX, or llama.cpp.
+It is not documented here as tested with MLX or llama.cpp.
 
 ## Links
 

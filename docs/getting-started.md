@@ -25,8 +25,7 @@ not download a large file until you know which runtime can load it. See
 Pick the runtime that matches the artifact you want to use:
 
 - [MLX](../mlx/README.md) for an MLX model directory;
-- [llama.cpp](../llama-cpp/README.md) for a GGUF file;
-- [oMLX](../omlx/README.md) for its managed MLX model directory; or
+- [llama.cpp](../llama-cpp/README.md) for a GGUF file; or
 - [MTPLX](../mtplx/README.md) for a complete artifact with matching native MTP components.
 
 The [local model notes](../local-models/) contain a few exact combinations used

@@ -17,8 +17,8 @@ combination with the other setups I've used for that Mac.
 
 ## Compatibility
 
-This is an MLX artifact. It is not documented here as tested with llama.cpp,
-oMLX, or MTPLX; those runtimes need their own compatible artifacts.
+This is an MLX artifact. It is not documented here as tested with llama.cpp or
+MTPLX; those runtimes need their own compatible artifacts.
 
 ## Links
 

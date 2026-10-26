@@ -15,7 +15,7 @@ setup I used.
 ## Compatibility
 
 This is an MLX-specific artifact. It is not documented here as tested with
-llama.cpp, oMLX, or MTPLX; those runtimes need their own compatible artifacts.
+llama.cpp or MTPLX; those runtimes need their own compatible artifacts.
 
 ## Links
 
