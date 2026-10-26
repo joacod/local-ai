@@ -31,9 +31,8 @@ model family
 These are related but not interchangeable downloads:
 
 - MLX servers expect an MLX-compatible model directory;
-- llama.cpp expects GGUF files;
-- MTPLX expects a complete artifact with matching native MTP components; and
-- oMLX uses its own supported MLX loading path.
+- llama.cpp expects GGUF files; and
+- MTPLX expects a complete artifact with matching native MTP components.
 
 ## Before downloading
 

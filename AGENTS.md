@@ -35,8 +35,8 @@ Prefer a short canonical explanation plus a link over copied sections.
   runtime's `docs/` directory.
 - Write for developers who may be new to local models. Prefer practical
   explanations and copy/paste commands over exhaustive reference material.
-- Keep the four maintained runtimes visible: MLX / `mlx-lm`, llama.cpp, oMLX,
-  and MTPLX.
+- Keep the three maintained runtimes visible: MLX / `mlx-lm`, llama.cpp, and
+  MTPLX.
 
 ## Evidence and recommendations
 
@@ -56,8 +56,8 @@ Prefer a short canonical explanation plus a link over copied sections.
   tables.
 - Do not create hardware profiles merely because a new machine exists. Add a
   machine index only when it can link to a concrete setup I've used.
-- Do not add wrappers around already-friendly native CLIs. MTPLX and oMLX should
-  use their upstream workflows directly.
+- Do not add wrappers around already-friendly native CLIs. MTPLX should use its
+  upstream workflow directly.
 - Preserve the useful MLX and llama.cpp launchers, but keep them thin and
   beginner-friendly. Hardware-specific presets do not belong in the basic
   path. An explicit, opt-in preset may remain when the maintainer uses it
